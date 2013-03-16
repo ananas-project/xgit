@@ -11,4 +11,8 @@ public class XGitException extends RuntimeException {
 		super(msg);
 	}
 
+	public XGitException(Throwable throwable) {
+		super(throwable);
+	}
+
 }
