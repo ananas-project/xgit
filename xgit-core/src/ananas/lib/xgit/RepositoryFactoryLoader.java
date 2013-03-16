@@ -3,19 +3,19 @@ package ananas.lib.xgit;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class XGitRepositoryFactoryLoader {
+public class RepositoryFactoryLoader {
 
-	private static XGitRepositoryFactory s_factory;
+	private static RepositoryFactory s_factory;
 
-	public static XGitRepositoryFactory getFactory() {
-		XGitRepositoryFactory fact = s_factory;
+	public static RepositoryFactory getFactory() {
+		RepositoryFactory fact = s_factory;
 		if (fact == null) {
-			fact = (new XGitRepositoryFactoryLoader()).load();
+			fact = (new RepositoryFactoryLoader()).load();
 		}
 		return fact;
 	}
 
-	private XGitRepositoryFactory load() {
+	private RepositoryFactory load() {
 		try {
 			String file = "xgit.properties";
 			Properties prop = new Properties();
@@ -31,7 +31,7 @@ public class XGitRepositoryFactoryLoader {
 				throw new XGitException("no key:" + classKey + " in propfile:"
 						+ file);
 			}
-			return (XGitRepositoryFactory) Class.forName(factClass)
+			return (RepositoryFactory) Class.forName(factClass)
 					.newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
