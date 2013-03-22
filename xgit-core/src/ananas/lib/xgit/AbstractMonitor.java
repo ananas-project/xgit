@@ -1,10 +1,10 @@
 package ananas.lib.xgit;
 
-import java.io.File;
+import ananas.lib.io.vfs.VFile;
 
 public interface AbstractMonitor {
 
-	File getFile();
+	VFile getFile();
 
 	boolean init();
 

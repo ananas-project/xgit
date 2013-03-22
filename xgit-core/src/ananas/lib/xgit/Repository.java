@@ -4,6 +4,8 @@ import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 
 public interface Repository extends DirectoryMonitor {
 
+	RepositoryProfile getProfile();
+
 	// out of repos dir
 	WorkingDirectory getWorkingDirectory();
 

@@ -31,8 +31,7 @@ public class RepositoryFactoryLoader {
 				throw new XGitException("no key:" + classKey + " in propfile:"
 						+ file);
 			}
-			return (RepositoryFactory) Class.forName(factClass)
-					.newInstance();
+			return (RepositoryFactory) Class.forName(factClass).newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XGitException(e);

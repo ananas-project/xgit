@@ -1,8 +1,10 @@
 package test.ananas.lib.xgit;
 
-import java.io.File;
 import java.net.URL;
 
+import ananas.lib.io.vfs.VFS;
+import ananas.lib.io.vfs.VFile;
+import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.RepositoryFactory;
 
@@ -31,21 +33,22 @@ public class TestXGit implements Runnable {
 
 		System.out.println(this + ".begin");
 
-		File dir = this.getReposDir();
+		VFile dir = this.getReposDir();
+		VFileSystem vfs = dir.getVFS();
 
 		RepositoryFactory factory = Repository.Factory.getFactory();
 
 		boolean bare = this.mBare;
 
 		if (bare) {
-			dir = new File(dir, "bare/xxx.git");
+			dir = vfs.newFile(dir, "bare/xxx.git");
 		} else {
-			dir = new File(dir, "nobare/yyy");
+			dir = vfs.newFile(dir, "nobare/yyy");
 		}
 
 		try {
 			System.out.println("try to create : " + dir);
-			Repository repos0 = factory.createNewRepository(dir, bare);
+			Repository repos0 = factory.createNewRepository(dir, bare, null);
 			repos0.getObjectsManager();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,11 +56,11 @@ public class TestXGit implements Runnable {
 
 		if (!bare) {
 
-			dir = new File(dir, "723/824");
+			dir = vfs.newFile(dir, "723/824");
 		}
 
 		System.out.println("try to open : " + dir);
-		Repository repos1 = factory.openRepository(dir, bare);
+		Repository repos1 = factory.openRepository(dir, bare, null);
 		repos1.getObjectsManager();
 
 		System.out.println("repos1 = " + repos1.getFile());
@@ -66,11 +69,14 @@ public class TestXGit implements Runnable {
 
 	}
 
-	private File getReposDir() {
+	private VFile getReposDir() {
+
+		VFileSystem vfs = VFS.getFactory().createFileSystem(null);
+
 		URL url = this.getClass().getProtectionDomain().getCodeSource()
 				.getLocation();
-		File file = new File(url.getPath());
-		return new File(file.getParentFile(), "repos");
+		VFile file = vfs.newFile(url.getPath());
+		return vfs.newFile(file.getParentFile(), "repos");
 	}
 
 }

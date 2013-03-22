@@ -1,20 +1,20 @@
 package ananas.lib.xgit.impl;
 
-import java.io.File;
 import java.io.IOException;
 
+import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.FileMonitor;
 
 public class AbstractFileMonitor implements FileMonitor {
 
-	private final File mFile;
+	private final VFile mFile;
 
-	public AbstractFileMonitor(File file) {
+	public AbstractFileMonitor(VFile file) {
 		this.mFile = file;
 	}
 
 	@Override
-	public File getFile() {
+	public VFile getFile() {
 		return this.mFile;
 	}
 

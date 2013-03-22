@@ -1,19 +1,18 @@
 package ananas.lib.xgit.impl;
 
-import java.io.File;
-
+import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.DirectoryMonitor;
 
 public class AbstractDirectoryMonitor implements DirectoryMonitor {
 
-	private final File mFile;
+	private final VFile mFile;
 
-	public AbstractDirectoryMonitor(File file) {
+	public AbstractDirectoryMonitor(VFile file) {
 		this.mFile = file;
 	}
 
 	@Override
-	public File getFile() {
+	public VFile getFile() {
 		return this.mFile;
 	}
 
@@ -33,15 +32,13 @@ public class AbstractDirectoryMonitor implements DirectoryMonitor {
 				return true;
 			}
 		}
-		
-		
+
 		if (this.mFile.exists()) {
 			if (this.mFile.isDirectory()) {
 				return true;
 			}
 		}
 
-		
 		return false;
 	}
 

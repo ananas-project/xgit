@@ -1,9 +1,10 @@
 package ananas.lib.xgit.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ananas.lib.io.vfs.VFile;
+import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.AbstractMonitor;
 import ananas.lib.xgit.BranchesManager;
 import ananas.lib.xgit.ConfigFile;
@@ -13,6 +14,7 @@ import ananas.lib.xgit.LogsManager;
 import ananas.lib.xgit.ObjectsManager;
 import ananas.lib.xgit.RefsManager;
 import ananas.lib.xgit.Repository;
+import ananas.lib.xgit.RepositoryProfile;
 import ananas.lib.xgit.WorkingDirectory;
 import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 import ananas.lib.xgit.impl.extension.XGitExManagerImpl;
@@ -29,26 +31,30 @@ public class RepositoryImpl extends AbstractDirectoryMonitor implements
 	private final ConfigFile mConfigFile;
 	private final HeadFile mHeadFile;
 	private final ObjectsManager mObjectsManager;
+	private final RepositoryProfile mProfile;
 
-	public RepositoryImpl(File dirRepo, boolean bare) {
+	public RepositoryImpl(VFile dirRepo, boolean bare, RepositoryProfile profile) {
 		super(dirRepo);
+		this.mProfile = profile;
+		VFileSystem vfs = dirRepo.getVFS();
 		if (bare) {
 			this.mWorkingDir = null;
 		} else {
-			File dir = dirRepo.getParentFile();
+			VFile dir = dirRepo.getParentFile();
 			this.mWorkingDir = new WorkingDirectoryImpl(dir);
 		}
 
-		this.mConfigFile = new ConfigFileImpl(new File(dirRepo, "config"));
-		this.mHeadFile = new HeadFileImpl(new File(dirRepo, "HEAD"));
+		this.mConfigFile = new ConfigFileImpl(vfs.newFile(dirRepo, "config"));
+		this.mHeadFile = new HeadFileImpl(vfs.newFile(dirRepo, "HEAD"));
 
-		this.mObjectsManager = new ObjectManagerImpl(new File(dirRepo,
+		this.mObjectsManager = new ObjectManagerImpl(vfs.newFile(dirRepo,
 				"objects"));
-		this.mLogsManager = new LogsManagerImpl(new File(dirRepo, "logs"));
-		this.mRefsManager = new RefsManagerImpl(new File(dirRepo, "refs"));
-		this.mHooksManager = new HooksManagerImpl(new File(dirRepo, "hooks"));
-		this.mXGitExNamager = new XGitExManagerImpl(new File(dirRepo, "xgit"));
-		this.mBranchesManager = new BranchesManagerImpl(new File(dirRepo,
+		this.mLogsManager = new LogsManagerImpl(vfs.newFile(dirRepo, "logs"));
+		this.mRefsManager = new RefsManagerImpl(vfs.newFile(dirRepo, "refs"));
+		this.mHooksManager = new HooksManagerImpl(vfs.newFile(dirRepo, "hooks"));
+		this.mXGitExNamager = new XGitExManagerImpl(
+				vfs.newFile(dirRepo, "xgit"));
+		this.mBranchesManager = new BranchesManagerImpl(vfs.newFile(dirRepo,
 				"branches"));
 
 	}
@@ -143,6 +149,11 @@ public class RepositoryImpl extends AbstractDirectoryMonitor implements
 	@Override
 	public HeadFile getFileHEAD() {
 		return this.mHeadFile;
+	}
+
+	@Override
+	public RepositoryProfile getProfile() {
+		return this.mProfile;
 	}
 
 }
