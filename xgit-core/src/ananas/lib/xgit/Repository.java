@@ -1,10 +1,11 @@
 package ananas.lib.xgit;
 
+import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 
 public interface Repository extends DirectoryMonitor {
 
-	RepositoryProfile getProfile();
+	XGitEnvironment getEnvironment();
 
 	// out of repos dir
 	WorkingDirectory getWorkingDirectory();
@@ -31,8 +32,19 @@ public interface Repository extends DirectoryMonitor {
 
 	class Factory {
 
-		public static RepositoryFactory getFactory() {
-			return RepositoryFactoryLoader.getFactory();
+		public static Repository open(VFile file, boolean bare) {
+			XGitEnvironment envi = new DefaultXGitEnvironment();
+			return envi.openRepository(file, bare);
+		}
+
+		public static Repository create(VFile file, boolean bare) {
+			XGitEnvironment envi = new DefaultXGitEnvironment();
+			return envi.createNewRepository(file, bare);
+		}
+
+		public static XGitEnvironment getEnvironment() {
+			XGitEnvironment envi = new DefaultXGitEnvironment();
+			return envi;
 		}
 
 	}

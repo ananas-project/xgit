@@ -4,17 +4,15 @@ import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.RepositoryFactory;
-import ananas.lib.xgit.RepositoryProfile;
+import ananas.lib.xgit.XGitEnvironment;
 import ananas.lib.xgit.XGitException;
 
 public class RespositoryFactoryImpl implements RepositoryFactory {
 
-	private RepositoryProfile mDefaultProfile;
-
 	@Override
 	public Repository openRepository(final VFile file, boolean bare,
-			RepositoryProfile profile) throws XGitException {
-		Repository repos = this._newReposForOpen(file, bare, profile);
+			XGitEnvironment envi) throws XGitException {
+		Repository repos = this._newReposForOpen(file, bare, envi);
 		if (!repos.check()) {
 			throw new XGitException("Check the repos failed.");
 		}
@@ -22,11 +20,8 @@ public class RespositoryFactoryImpl implements RepositoryFactory {
 	}
 
 	private Repository _newReposForOpen(final VFile file, boolean bare,
-			RepositoryProfile profile) {
+			XGitEnvironment profile) {
 
-		if (profile == null) {
-			profile = this.mDefaultProfile;
-		}
 		final String strDotGit = profile.getRepositoryDirectoryName();
 		if (bare) {
 			return new RepositoryImpl(file, bare, profile);
@@ -48,13 +43,9 @@ public class RespositoryFactoryImpl implements RepositoryFactory {
 
 	@Override
 	public Repository createNewRepository(VFile file, boolean bare,
-			RepositoryProfile profile) throws XGitException {
+			XGitEnvironment envi) throws XGitException {
 
-		if (profile == null) {
-			profile = this.mDefaultProfile;
-		}
-
-		final String dotGit = profile.getRepositoryDirectoryName();
+		final String dotGit = envi.getRepositoryDirectoryName();
 		VFileSystem vfs = file.getVFS();
 
 		if (bare) {
@@ -73,21 +64,11 @@ public class RespositoryFactoryImpl implements RepositoryFactory {
 			file = vfs.newFile(file, dotGit);
 		}
 
-		Repository repos = new RepositoryImpl(file, bare, profile);
+		Repository repos = new RepositoryImpl(file, bare, envi);
 		if (!repos.init()) {
 			throw new XGitException("Cannot init the repos.");
 		}
 		return repos;
-	}
-
-	@Override
-	public RepositoryProfile getDefaultProfile() {
-		return this.mDefaultProfile;
-	}
-
-	@Override
-	public void setDefaultProfile(RepositoryProfile profile) {
-		this.mDefaultProfile = profile;
 	}
 
 }

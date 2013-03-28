@@ -14,8 +14,8 @@ import ananas.lib.xgit.LogsManager;
 import ananas.lib.xgit.ObjectsManager;
 import ananas.lib.xgit.RefsManager;
 import ananas.lib.xgit.Repository;
-import ananas.lib.xgit.RepositoryProfile;
 import ananas.lib.xgit.WorkingDirectory;
+import ananas.lib.xgit.XGitEnvironment;
 import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 import ananas.lib.xgit.impl.extension.XGitExManagerImpl;
 
@@ -31,11 +31,11 @@ public class RepositoryImpl extends AbstractDirectoryMonitor implements
 	private final ConfigFile mConfigFile;
 	private final HeadFile mHeadFile;
 	private final ObjectsManager mObjectsManager;
-	private final RepositoryProfile mProfile;
+	private final XGitEnvironment mEnvironment;
 
-	public RepositoryImpl(VFile dirRepo, boolean bare, RepositoryProfile profile) {
+	public RepositoryImpl(VFile dirRepo, boolean bare, XGitEnvironment envi) {
 		super(dirRepo);
-		this.mProfile = profile;
+		this.mEnvironment = envi;
 		VFileSystem vfs = dirRepo.getVFS();
 		if (bare) {
 			this.mWorkingDir = null;
@@ -152,8 +152,8 @@ public class RepositoryImpl extends AbstractDirectoryMonitor implements
 	}
 
 	@Override
-	public RepositoryProfile getProfile() {
-		return this.mProfile;
+	public XGitEnvironment getEnvironment() {
+		return this.mEnvironment;
 	}
 
 }
