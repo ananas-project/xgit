@@ -1,6 +1,7 @@
 package ananas.lib.xgit;
 
 import ananas.lib.io.vfs.VFile;
+import ananas.lib.xgit.task.TaskFactoryRegistrar;
 
 public interface XGitEnvironment {
 
@@ -13,4 +14,5 @@ public interface XGitEnvironment {
 	Repository createNewRepository(VFile file, boolean bare)
 			throws XGitException;
 
+	TaskFactoryRegistrar getTaskFactoryRegistrar();
 }
