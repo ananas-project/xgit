@@ -2,12 +2,15 @@ package ananas.lib.xgit.impl;
 
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.DirectoryMonitor;
+import ananas.lib.xgit.Repository;
 
 public class AbstractDirectoryMonitor implements DirectoryMonitor {
 
 	private final VFile mFile;
+	private final Repository mRepo;
 
-	public AbstractDirectoryMonitor(VFile file) {
+	public AbstractDirectoryMonitor(Repository repo, VFile file) {
+		this.mRepo = repo;
 		this.mFile = file;
 	}
 
@@ -40,6 +43,11 @@ public class AbstractDirectoryMonitor implements DirectoryMonitor {
 		}
 
 		return false;
+	}
+
+	@Override
+	public Repository getRepository() {
+		return this.mRepo;
 	}
 
 }

@@ -34,28 +34,32 @@ public class RepositoryImpl extends AbstractDirectoryMonitor implements
 	private final XGitEnvironment mEnvironment;
 
 	public RepositoryImpl(VFile dirRepo, boolean bare, XGitEnvironment envi) {
-		super(dirRepo);
+		super(null, dirRepo);
 		this.mEnvironment = envi;
 		VFileSystem vfs = dirRepo.getVFS();
 		if (bare) {
 			this.mWorkingDir = null;
 		} else {
 			VFile dir = dirRepo.getParentFile();
-			this.mWorkingDir = new WorkingDirectoryImpl(dir);
+			this.mWorkingDir = new WorkingDirectoryImpl(this, dir);
 		}
 
-		this.mConfigFile = new ConfigFileImpl(vfs.newFile(dirRepo, "config"));
-		this.mHeadFile = new HeadFileImpl(vfs.newFile(dirRepo, "HEAD"));
+		this.mConfigFile = new ConfigFileImpl(this, vfs.newFile(dirRepo,
+				"config"));
+		this.mHeadFile = new HeadFileImpl(this, vfs.newFile(dirRepo, "HEAD"));
 
-		this.mObjectsManager = new ObjectManagerImpl(vfs.newFile(dirRepo,
+		this.mObjectsManager = new ObjectManagerImpl(this, vfs.newFile(dirRepo,
 				"objects"));
-		this.mLogsManager = new LogsManagerImpl(vfs.newFile(dirRepo, "logs"));
-		this.mRefsManager = new RefsManagerImpl(vfs.newFile(dirRepo, "refs"));
-		this.mHooksManager = new HooksManagerImpl(vfs.newFile(dirRepo, "hooks"));
-		this.mXGitExNamager = new XGitExManagerImpl(
-				vfs.newFile(dirRepo, "xgit"));
-		this.mBranchesManager = new BranchesManagerImpl(vfs.newFile(dirRepo,
-				"branches"));
+		this.mLogsManager = new LogsManagerImpl(this, vfs.newFile(dirRepo,
+				"logs"));
+		this.mRefsManager = new RefsManagerImpl(this, vfs.newFile(dirRepo,
+				"refs"));
+		this.mHooksManager = new HooksManagerImpl(this, vfs.newFile(dirRepo,
+				"hooks"));
+		this.mXGitExNamager = new XGitExManagerImpl(this, vfs.newFile(dirRepo,
+				"xgit"));
+		this.mBranchesManager = new BranchesManagerImpl(this, vfs.newFile(
+				dirRepo, "branches"));
 
 	}
 

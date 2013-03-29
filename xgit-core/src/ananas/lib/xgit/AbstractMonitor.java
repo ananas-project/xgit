@@ -10,4 +10,6 @@ public interface AbstractMonitor {
 
 	boolean check();
 
+	Repository getRepository();
+
 }

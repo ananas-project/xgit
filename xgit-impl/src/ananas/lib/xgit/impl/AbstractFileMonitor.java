@@ -4,13 +4,16 @@ import java.io.IOException;
 
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.FileMonitor;
+import ananas.lib.xgit.Repository;
 
 public class AbstractFileMonitor implements FileMonitor {
 
 	private final VFile mFile;
+	private final Repository mRepo;
 
-	public AbstractFileMonitor(VFile file) {
+	public AbstractFileMonitor(Repository repo, VFile file) {
 		this.mFile = file;
+		this.mRepo = repo;
 	}
 
 	@Override
@@ -40,6 +43,11 @@ public class AbstractFileMonitor implements FileMonitor {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Repository getRepository() {
+		return this.mRepo;
 	}
 
 }

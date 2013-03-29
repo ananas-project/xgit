@@ -7,6 +7,7 @@ import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.XGitEnvironment;
+import ananas.lib.xgit.task.Task;
 
 public class TestXGit implements Runnable {
 
@@ -18,8 +19,8 @@ public class TestXGit implements Runnable {
 
 		System.out.println("============================");
 
-		bare = false;
-		(new TestXGit(bare)).run();
+		// bare = false;
+		// (new TestXGit(bare)).run();
 	}
 
 	private boolean mBare;
@@ -35,7 +36,6 @@ public class TestXGit implements Runnable {
 
 		VFile dir = this.getReposDir();
 		VFileSystem vfs = dir.getVFS();
-
 		XGitEnvironment envi = Repository.Factory.getEnvironment();
 
 		boolean bare = this.mBare;
@@ -51,7 +51,7 @@ public class TestXGit implements Runnable {
 			Repository repos0 = envi.createNewRepository(dir, bare);
 			repos0.getObjectsManager();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		if (!bare) {
@@ -64,6 +64,9 @@ public class TestXGit implements Runnable {
 		repos1.getObjectsManager();
 
 		System.out.println("repos1 = " + repos1.getFile());
+
+		Task task = new TaskAdd(repos1);
+		task.run();
 
 		System.out.println(this + ".end");
 

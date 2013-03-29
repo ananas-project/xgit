@@ -3,6 +3,7 @@ package ananas.lib.xgit.impl.extension;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.AbstractMonitor;
+import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 import ananas.lib.xgit.extension.XGitIndexFile;
 import ananas.lib.xgit.extension.XGitIndexManager;
@@ -16,13 +17,14 @@ public class XGitExManagerImpl extends AbstractDirectoryMonitor implements
 	private XGitIndexManager mIndexManager;
 	private XGitIndexFile mIndexFile;
 
-	public XGitExManagerImpl(VFile dir) {
-		super(dir);
+	public XGitExManagerImpl(Repository repo, VFile dir) {
+		super(repo, dir);
 		VFileSystem vfs = dir.getVFS();
-		this.mIndexFile = new IndexFileImpl(vfs.newFile(dir, "index"));
-		this.mIndexManager = new IndexManagerImpl(vfs.newFile(dir, "indexMap"));
-		this.mMetaDataManager = new MetaDataManagerImpl(
-				vfs.newFile(dir, "meta"));
+		this.mIndexFile = new IndexFileImpl(repo, vfs.newFile(dir, "index"));
+		this.mIndexManager = new IndexManagerImpl(repo, vfs.newFile(dir,
+				"indexMap"));
+		this.mMetaDataManager = new MetaDataManagerImpl(repo, vfs.newFile(dir,
+				"meta"));
 	}
 
 	@Override
