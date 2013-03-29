@@ -8,6 +8,7 @@ import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.XGitEnvironment;
 import ananas.lib.xgit.task.Task;
+import ananas.lib.xgit.task.DoAdd;
 
 public class TestXGit implements Runnable {
 
@@ -65,7 +66,7 @@ public class TestXGit implements Runnable {
 
 		System.out.println("repos1 = " + repos1.getFile());
 
-		Task task = new TaskAdd(repos1);
+		Task task = new DoAdd(repos1);
 		task.run();
 
 		System.out.println(this + ".end");
