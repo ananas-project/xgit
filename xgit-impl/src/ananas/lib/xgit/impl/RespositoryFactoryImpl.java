@@ -20,6 +20,7 @@ public class RespositoryFactoryImpl implements RepositoryFactory {
 		DTWorkspace works = this._getWorkspace(file);
 		if (!works.check()) {
 			// TODO ...
+			throw new XGitException("check failed.");
 		}
 		Repository repo = this._newRepository(works, bare, envi);
 		return repo;
@@ -32,6 +33,7 @@ public class RespositoryFactoryImpl implements RepositoryFactory {
 		DTWorkspace works = this._getWorkspace(file);
 		if (!works.init()) {
 			// TODO ...
+			throw new XGitException("init failed.");
 		}
 		Repository repo = this._newRepository(works, bare, envi);
 		return repo;

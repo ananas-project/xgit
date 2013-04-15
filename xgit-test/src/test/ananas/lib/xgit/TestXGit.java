@@ -57,15 +57,14 @@ public class TestXGit implements Runnable {
 		}
 
 		if (!bare) {
-			dir = vfs.newFile(dir, "723/824");
+			// dir = vfs.newFile(dir, "723/824");
 		}
 
 		System.out.println("try to open : " + dir);
 		Repository repos1 = envi.openRepository(dir, bare);
 		repos1.getObjectsManager();
 
-		System.out.println("repos1 = "
-				+ repos1.getRepoDirectory().getFile());
+		System.out.println("repos1 = " + repos1.getRepoDirectory().getFile());
 
 		// Task task = new DoAdd(repos1);
 		// task.run();
