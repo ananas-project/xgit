@@ -1,5 +1,5 @@
 package ananas.lib.xgit;
 
-public interface FileMonitor extends AbstractMonitor {
+public interface FileMonitor extends NodeMonitor {
 
 }

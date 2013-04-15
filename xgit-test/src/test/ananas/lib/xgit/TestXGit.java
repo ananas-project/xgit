@@ -7,8 +7,6 @@ import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.xgit.Repository;
 import ananas.lib.xgit.XGitEnvironment;
-import ananas.lib.xgit.task.Task;
-import ananas.lib.xgit.task.DoAdd;
 
 public class TestXGit implements Runnable {
 
@@ -16,6 +14,9 @@ public class TestXGit implements Runnable {
 		boolean bare;
 
 		bare = true;
+		(new TestXGit(bare)).run();
+
+		bare = false;
 		(new TestXGit(bare)).run();
 
 		System.out.println("============================");
@@ -44,7 +45,7 @@ public class TestXGit implements Runnable {
 		if (bare) {
 			dir = vfs.newFile(dir, "bare/xxx.git");
 		} else {
-			dir = vfs.newFile(dir, "nobare/yyy");
+			dir = vfs.newFile(dir, "nobare/yyy/.git");
 		}
 
 		try {
@@ -56,7 +57,6 @@ public class TestXGit implements Runnable {
 		}
 
 		if (!bare) {
-
 			dir = vfs.newFile(dir, "723/824");
 		}
 
@@ -64,10 +64,11 @@ public class TestXGit implements Runnable {
 		Repository repos1 = envi.openRepository(dir, bare);
 		repos1.getObjectsManager();
 
-		System.out.println("repos1 = " + repos1.getFile());
+		System.out.println("repos1 = "
+				+ repos1.getRepoDirectory().getFile());
 
-		Task task = new DoAdd(repos1);
-		task.run();
+		// Task task = new DoAdd(repos1);
+		// task.run();
 
 		System.out.println(this + ".end");
 

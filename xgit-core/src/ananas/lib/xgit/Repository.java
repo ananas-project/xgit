@@ -3,9 +3,7 @@ package ananas.lib.xgit;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.xgit.extension.XGitExtensionsDirectory;
 
-public interface Repository extends DirectoryMonitor {
-
-	XGitEnvironment getEnvironment();
+public interface Repository extends BaseRepository {
 
 	// out of repos dir
 	WorkingDirectory getWorkingDirectory();
@@ -26,9 +24,6 @@ public interface Repository extends DirectoryMonitor {
 	ConfigFile getFileConfig();
 
 	HeadFile getFileHEAD();
-
-	// attributes
-	boolean isBare();
 
 	class Factory {
 
