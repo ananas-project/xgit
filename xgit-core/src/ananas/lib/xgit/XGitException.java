@@ -1,18 +1,21 @@
 package ananas.lib.xgit;
 
-public class XGitException extends RuntimeException {
+public class XGitException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6886701625264674320L;
+
+	public XGitException() {
+	}
 
 	public XGitException(String msg) {
 		super(msg);
 	}
 
-	public XGitException(Throwable throwable) {
-		super(throwable);
+	public XGitException(Exception e) {
+		super(e);
 	}
 
 }

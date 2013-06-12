@@ -1,86 +1,42 @@
 package test.ananas.lib.xgit;
 
-import java.net.URL;
-
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
-import ananas.lib.xgit.Repository;
-import ananas.lib.xgit.XGitEnvironment;
+import ananas.lib.xgit.XGitRepo;
+import ananas.lib.xgit.XGitRepoFactory;
+import ananas.lib.xgit.task.ext.RepoInit;
+import ananas.lib.xgit.util.DefaultXGitRepoFactory;
 
 public class TestXGit implements Runnable {
 
 	public static void main(String[] arg) {
-		boolean bare;
 
-		bare = true;
-		(new TestXGit(bare)).run();
+		(new TestXGit()).run();
+		System.out.println("THE END");
 
-		bare = false;
-		(new TestXGit(bare)).run();
-
-		System.out.println("============================");
-
-		// bare = false;
-		// (new TestXGit(bare)).run();
-	}
-
-	private boolean mBare;
-
-	public TestXGit(boolean bare) {
-		this.mBare = bare;
 	}
 
 	@Override
 	public void run() {
 
-		System.out.println(this + ".begin");
-
-		VFile dir = this.getReposDir();
-		VFileSystem vfs = dir.getVFS();
-		XGitEnvironment envi = Repository.Factory.getEnvironment();
-
-		boolean bare = this.mBare;
-
-		if (bare) {
-			dir = vfs.newFile(dir, "bare/xxx.git");
-		} else {
-			dir = vfs.newFile(dir, "nobare/yyy/.git");
-		}
-
-		try {
-			System.out.println("try to create : " + dir);
-			Repository repos0 = envi.createNewRepository(dir, bare);
-			repos0.getObjectsManager();
-		} catch (Exception e) {
-			// e.printStackTrace();
-		}
-
-		if (!bare) {
-			// dir = vfs.newFile(dir, "723/824");
-		}
-
-		System.out.println("try to open : " + dir);
-		Repository repos1 = envi.openRepository(dir, bare);
-		repos1.getObjectsManager();
-
-		System.out.println("repos1 = " + repos1.getRepoDirectory().getFile());
-
-		// Task task = new DoAdd(repos1);
-		// task.run();
-
-		System.out.println(this + ".end");
+		this.__unsafe_run();
 
 	}
 
-	private VFile getReposDir() {
+	private void __unsafe_run() {
 
-		VFileSystem vfs = VFS.getFactory().createFileSystem(null);
+		String path = "/home/xukun/snowflake_VMs/the1st.xgit";
 
-		URL url = this.getClass().getProtectionDomain().getCodeSource()
-				.getLocation();
-		VFile file = vfs.newFile(url.getPath());
-		return vfs.newFile(file.getParentFile(), "repos");
+		VFileSystem vfs = VFS.getFactory().defaultFileSystem();
+		VFile file = vfs.newFile(path);
+
+		XGitRepoFactory fact = new DefaultXGitRepoFactory();
+		XGitRepo repo = fact.createRepo(file);
+
+		RepoInit init = repo.getTaskFactory().doInit(repo);
+		init.getTaskContext().start();
+
 	}
 
 }
