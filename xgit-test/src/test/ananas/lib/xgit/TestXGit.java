@@ -37,6 +37,8 @@ public class TestXGit implements Runnable {
 		RepoInit init = repo.getTaskFactory().doInit(repo);
 		init.getTaskContext().start();
 
+		repo.getTaskFactory().doOpen(repo).getTaskContext().start();
+
 	}
 
 }

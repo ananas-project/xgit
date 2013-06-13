@@ -18,6 +18,8 @@ public interface XGitWorkspace {
 	String dir_refs = "refs";
 	String dir_xgit = "xgit";
 
+	String dir_x_tmp = "xgit/tmp";
+
 	String file_config = "config";
 	String file_description = "description";
 	String file_FETCH_HEAD = "FETCH_HEAD";

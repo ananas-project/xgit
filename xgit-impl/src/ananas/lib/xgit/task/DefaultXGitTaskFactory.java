@@ -29,14 +29,16 @@ public class DefaultXGitTaskFactory implements XGitTaskFactory, Component {
 
 	@Override
 	public RepoCheck doCheck(XGitRepo repo) {
-		// TODO Auto-generated method stub
-		return null;
+		RepoCheck ret = new RepoCheckImpl();
+		this.setupContext(repo, ret);
+		return ret;
 	}
 
 	@Override
 	public RepoOpen doOpen(XGitRepo repo) {
-		// TODO Auto-generated method stub
-		return null;
+		RepoOpen ret = new RepoOpenImpl();
+		this.setupContext(repo, ret);
+		return ret;
 	}
 
 	@Override

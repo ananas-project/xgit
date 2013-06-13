@@ -35,6 +35,8 @@ public class XGitWorkspaceImpl implements XGitWorkspace {
 		isf.add(true, XGitWorkspace.dir_refs, true);
 		isf.add(true, XGitWorkspace.dir_xgit, true);
 
+		isf.add(true, XGitWorkspace.dir_x_tmp, false);
+
 		isf.add(false, XGitWorkspace.file_config, true);
 		isf.add(false, XGitWorkspace.file_description, false);
 		isf.add(false, XGitWorkspace.file_FETCH_HEAD, false);
