@@ -9,7 +9,7 @@ public interface XGitTaskContext extends Task {
 
 	XGitTaskRunnable getTaskRunnable();
 
-	void setTaskRunnable(XGitTaskRunnable task);
+	void setTaskRunnable(XGitTaskRunnable runnable);
 
 	boolean isCancel();
 

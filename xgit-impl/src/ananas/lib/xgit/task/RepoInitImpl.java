@@ -19,7 +19,7 @@ class RepoInitImpl extends AbstractXGitTask implements RepoInit {
 
 		XGitRepo repo = context.getRepo();
 		XGitWorkspace worksp = repo.getWorkspace();
-		VFile dir_this = worksp.getFile(XGitWorkspace.dir_this);
+		VFile dir_this = worksp.getFile(XGitWorkspace.dir_main);
 		VFile dir_working = worksp.getFile(XGitWorkspace.dir_working);
 
 		String dotXGit = dir_this.getName();

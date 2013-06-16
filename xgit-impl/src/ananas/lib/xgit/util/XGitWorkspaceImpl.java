@@ -14,19 +14,19 @@ import ananas.lib.xgit.XGitWorkspace;
 
 public class XGitWorkspaceImpl implements XGitWorkspace {
 
-	// private final VFile mMainPath;
-
+	private final VFile mMainPath;
 	private final Map<String, XGitFileInfo> mInfoTable;
 	private final List<String> mKeys;
 
 	public XGitWorkspaceImpl(VFile path) {
-		// this.mMainPath = path;
+
+		this.mMainPath = path;
 
 		MyInfoSetFactory isf = new MyInfoSetFactory(path);
 
 		// outer
 		isf.add(true, XGitWorkspace.dir_working, true);
-		isf.add(true, XGitWorkspace.dir_this, true);
+		isf.add(true, XGitWorkspace.dir_main, true);
 		// inner
 		isf.add(true, XGitWorkspace.dir_branches, true);
 		isf.add(true, XGitWorkspace.dir_hooks, false);
@@ -119,7 +119,7 @@ public class XGitWorkspaceImpl implements XGitWorkspace {
 				return;
 			} else if (key.equals(XGitWorkspace.dir_working)) {
 				file = this.m_path.getParentFile();
-			} else if (key.equals(XGitWorkspace.dir_this)) {
+			} else if (key.equals(XGitWorkspace.dir_main)) {
 				file = this.m_path;
 			} else {
 				VFileSystem vfs = this.m_path.getVFS();
@@ -157,4 +157,8 @@ public class XGitWorkspaceImpl implements XGitWorkspace {
 		return new ArrayList<String>(this.mKeys);
 	}
 
+	@Override
+	public VFile getMainDirectory() {
+		return this.mMainPath;
+	}
 }

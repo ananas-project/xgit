@@ -8,7 +8,7 @@ public interface XGitWorkspace {
 
 	// outer
 	String dir_working = "..";
-	String dir_this = ".";
+	String dir_main = ".";
 
 	// inner
 	String dir_branches = "branches";
@@ -27,6 +27,8 @@ public interface XGitWorkspace {
 	String file_index = "index";
 
 	// methods
+
+	VFile getMainDirectory();
 
 	VFile getFile(String key);
 
