@@ -1,7 +1,8 @@
 package ananas.lib.xgit.task;
 
 import ananas.fileworks.Component;
-import ananas.fileworks.task.TaskRunner;
+import ananas.fileworks.ComponentFactory;
+import ananas.fileworks.Context;
 import ananas.lib.xgit.XGitRepo;
 import ananas.lib.xgit.task.ext.RepoCheck;
 import ananas.lib.xgit.task.ext.RepoInit;
@@ -10,41 +11,42 @@ import ananas.lib.xgit.task.ext.RepoRepair;
 
 public class DefaultXGitTaskFactory implements XGitTaskFactory, Component {
 
-	@Override
-	public RepoInit doInit(XGitRepo repo) {
-		RepoInit ret = new RepoInitImpl();
-		this.setupContext(repo, ret);
-		return ret;
+	public static class Factory implements ComponentFactory {
+
+		@Override
+		public Component createComponent(Context context) {
+			return new DefaultXGitTaskFactory();
+		}
+
 	}
 
-	private void setupContext(XGitRepo repo, XGitTaskRunnable runn) {
+	private XGitTaskRunnable __newTask(XGitRepo repo, Class<?> api) {
 
-		TaskRunner runner = (TaskRunner) repo.getContext().getEnvironment()
-				.getSingletonManager().get(TaskRunner.class, null);
-		XGitTaskContext context = new DefaultXGitTaskContext(repo);
-		context.setRunner(runner);
-		context.setTaskRunnable(runn);
-		runn.setTaskContext(context);
+		XGitTaskRegistrar taskRegr = (XGitTaskRegistrar) repo.getContext()
+				.getEnvironment().getSingletonManager()
+				.get(XGitTaskRegistrar.class, null);
+
+		return taskRegr.createTask(repo, api);
+	}
+
+	@Override
+	public RepoInit doInit(XGitRepo repo) {
+		return (RepoInit) this.__newTask(repo, RepoInit.class);
 	}
 
 	@Override
 	public RepoCheck doCheck(XGitRepo repo) {
-		RepoCheck ret = new RepoCheckImpl();
-		this.setupContext(repo, ret);
-		return ret;
+		return (RepoCheck) this.__newTask(repo, RepoCheck.class);
 	}
 
 	@Override
 	public RepoOpen doOpen(XGitRepo repo) {
-		RepoOpen ret = new RepoOpenImpl();
-		this.setupContext(repo, ret);
-		return ret;
+		return (RepoOpen) this.__newTask(repo, RepoOpen.class);
 	}
 
 	@Override
 	public RepoRepair doRepair(XGitRepo repo) {
-		// TODO Auto-generated method stub
-		return null;
+		return (RepoRepair) this.__newTask(repo, RepoRepair.class);
 	}
 
 }

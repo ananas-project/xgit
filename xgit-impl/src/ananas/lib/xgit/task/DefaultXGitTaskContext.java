@@ -14,7 +14,7 @@ public class DefaultXGitTaskContext implements XGitTaskContext {
 			DefaultXGitTaskContext.this.doRun();
 		}
 	};
-	private Context mContext;
+	private final Context mContext;
 	private XGitTaskRunnable mTaskRunnable;
 	private String mStatus;
 	private TaskRunner mRunner;
@@ -24,6 +24,7 @@ public class DefaultXGitTaskContext implements XGitTaskContext {
 
 	public DefaultXGitTaskContext(XGitRepo repo) {
 		this.mRepo = repo;
+		this.mContext = repo.getContext();
 	}
 
 	private void doRun() {

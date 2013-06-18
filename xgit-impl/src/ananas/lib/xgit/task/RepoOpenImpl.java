@@ -18,4 +18,12 @@ public class RepoOpenImpl extends AbstractXGitTask implements RepoOpen {
 
 	}
 
+	public static class Factory implements XGitTaskRunnableFactory {
+
+		@Override
+		public XGitTaskRunnable createTaskRunnable() {
+			return new RepoOpenImpl();
+		}
+	}
+
 }

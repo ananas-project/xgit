@@ -1,5 +1,7 @@
 package ananas.lib.xgit.util;
 
+import ananas.fileworks.Component;
+import ananas.fileworks.ComponentFactory;
 import ananas.fileworks.ComponentManager;
 import ananas.fileworks.Context;
 import ananas.fileworks.util.ComponentCache;
@@ -9,7 +11,7 @@ import ananas.lib.xgit.XGitRepo;
 import ananas.lib.xgit.XGitWorkspace;
 import ananas.lib.xgit.task.XGitTaskFactory;
 
-final class XGitRepoImpl implements XGitRepo {
+final class XGitRepoImpl implements XGitRepo, Component {
 
 	private final Context mContext;
 	private XGitWorkspace mWorkspace;
@@ -46,6 +48,14 @@ final class XGitRepoImpl implements XGitRepo {
 	@Override
 	public XGitTaskFactory getTaskFactory() {
 		return this.m_taskFactory.get();
+	}
+
+	public static class Factory implements ComponentFactory {
+
+		@Override
+		public Component createComponent(Context context) {
+			return new XGitRepoImpl(context);
+		}
 	}
 
 }

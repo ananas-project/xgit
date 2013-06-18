@@ -10,7 +10,7 @@ import ananas.lib.xgit.XGitRepo;
 import ananas.lib.xgit.XGitWorkspace;
 import ananas.lib.xgit.task.ext.RepoInit;
 
-class RepoInitImpl extends AbstractXGitTask implements RepoInit {
+public class RepoInitImpl extends AbstractXGitTask implements RepoInit {
 
 	@Override
 	public void run(XGitTaskContext context) throws XGitException {
@@ -63,6 +63,14 @@ class RepoInitImpl extends AbstractXGitTask implements RepoInit {
 
 			}
 
+		}
+	}
+
+	public static class Factory implements XGitTaskRunnableFactory {
+
+		@Override
+		public XGitTaskRunnable createTaskRunnable() {
+			return new RepoInitImpl();
 		}
 	}
 

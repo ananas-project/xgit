@@ -1,7 +1,7 @@
 package ananas.lib.xgit.boot;
 
-import ananas.fileworks.task.TaskFactory;
+import ananas.fileworks.ComponentFactory;
 
-public interface XGitBooterFactory extends TaskFactory {
+public interface XGitBooterFactory extends ComponentFactory {
 
 }

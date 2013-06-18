@@ -43,4 +43,11 @@ public class RepoCheckImpl extends AbstractXGitTask implements RepoCheck {
 		// System.out.println(" ........ (done)");
 	}
 
+	public static class Factory implements XGitTaskRunnableFactory {
+
+		@Override
+		public XGitTaskRunnable createTaskRunnable() {
+			return new RepoCheckImpl();
+		}
+	}
 }
