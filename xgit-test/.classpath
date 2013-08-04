@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ananas-base-jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/fileworks"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ananas-base-lib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
