@@ -1,10 +1,8 @@
 package ananas.lib.xgit;
 
-import java.util.List;
+import ananas.fileworks.node.Tree;
 
-import ananas.lib.io.vfs.VFile;
-
-public interface XGitWorkspace {
+public interface XGitWorkspace extends Tree {
 
 	// outer
 	String dir_working = "..";
@@ -28,12 +26,6 @@ public interface XGitWorkspace {
 
 	// methods
 
-	VFile getMainDirectory();
-
-	VFile getFile(String key);
-
-	XGitFileInfo getFileInfo(String key);
-
-	List<String> listKeys();
+	XGitRepo getRepo();
 
 }

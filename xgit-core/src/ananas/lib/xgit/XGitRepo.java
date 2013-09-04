@@ -1,14 +1,11 @@
 package ananas.lib.xgit;
 
-import ananas.fileworks.Context;
-import ananas.lib.xgit.task.XGitTaskFactory;
+import ananas.fileworks.node.Tree;
 
-public interface XGitRepo {
-
-	Context getContext();
+public interface XGitRepo extends Tree {
 
 	XGitWorkspace getWorkspace();
 
-	XGitTaskFactory getTaskFactory();
+	boolean isBare();
 
 }

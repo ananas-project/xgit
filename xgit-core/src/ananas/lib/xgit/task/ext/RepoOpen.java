@@ -1,7 +1,7 @@
 package ananas.lib.xgit.task.ext;
 
-import ananas.lib.xgit.task.XGitTaskRunnable;
+import ananas.lib.xgit.task.XGitTask;
 
-public interface RepoOpen extends XGitTaskRunnable {
+public interface RepoOpen extends XGitTask {
 
 }
