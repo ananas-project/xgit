@@ -1,9 +1,9 @@
 package ananas.lib.xgit.task;
 
-import ananas.lib.xgit.XGitRepo;
+import ananas.lib.xgit.repo.Repo;
 
 public interface XGitTaskFactory {
 
-	XGitTask newTask(XGitRepo repo, String name);
+	XGitTask newTask(Repo repo, String name);
 
 }

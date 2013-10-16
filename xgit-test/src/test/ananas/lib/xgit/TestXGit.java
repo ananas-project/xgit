@@ -4,9 +4,9 @@ import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.util.PropertiesLoader;
-import ananas.lib.xgit.XGitRepo;
-import ananas.lib.xgit.XGitRepoFactory;
-import ananas.lib.xgit.task.ext.RepoInit;
+import ananas.lib.xgit.repo.local.DefaultLocalRepoFactory;
+import ananas.lib.xgit.repo.local.LocalObjectBank;
+import ananas.lib.xgit.repo.local.LocalRepo;
 
 public class TestXGit implements Runnable {
 
@@ -30,13 +30,9 @@ public class TestXGit implements Runnable {
 		VFileSystem vfs = VFS.getDefaultFactory().defaultFileSystem();
 		VFile file = vfs.newFile(path);
 
-		XGitRepoFactory fact = XGitRepoFactory.Util.getDefaultFactory();
-		XGitRepo repo = fact.createRepo(file);
-
-		RepoInit init = repo.getTaskFactory().doInit(repo);
-		init.getTaskContext().start();
-
-		repo.getTaskFactory().doOpen(repo).getTaskContext().start();
+		LocalRepo repo = (new DefaultLocalRepoFactory()).createRepo(file);
+		LocalObjectBank bank = repo.getObjectBank();
+		// bank.getObject( id ) ;
 
 	}
 

@@ -1,8 +1,6 @@
 package ananas.lib.xgit;
 
-import ananas.fileworks.node.Tree;
-
-public interface XGitWorkspace extends Tree {
+public interface XGitWorkspace {
 
 	// outer
 	String dir_working = "..";
@@ -23,9 +21,5 @@ public interface XGitWorkspace extends Tree {
 	String file_FETCH_HEAD = "FETCH_HEAD";
 	String file_HEAD = "HEAD";
 	String file_index = "index";
-
-	// methods
-
-	XGitRepo getRepo();
 
 }
