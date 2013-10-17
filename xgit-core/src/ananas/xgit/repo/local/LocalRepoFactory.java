@@ -1,12 +1,16 @@
 package ananas.xgit.repo.local;
 
+import java.io.IOException;
+
 import ananas.lib.io.vfs.VFile;
+import ananas.xgit.XGitException;
 import ananas.xgit.repo.RepoFactory;
 
 public interface LocalRepoFactory extends RepoFactory {
 
-	LocalRepo createRepo(VFile file);
+	LocalRepo openRepo(VFile file) throws IOException, XGitException;
 
-	LocalRepo createRepo(VFile file, boolean bare);
+	LocalRepo initRepo(VFile file, boolean bare) throws IOException,
+			XGitException;
 
 }

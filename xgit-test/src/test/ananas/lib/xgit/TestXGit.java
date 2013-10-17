@@ -8,6 +8,7 @@ import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.util.PropertiesLoader;
+import ananas.xgit.XGitException;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.local.DefaultLocalRepoFactory;
 import ananas.xgit.repo.local.LocalObject;
@@ -31,22 +32,33 @@ public class TestXGit implements Runnable {
 
 	private void __unsafe_run() {
 
-		String path = "/home/xukun/snowflake_VMs/the1st.xgit";
-
-		VFileSystem vfs = VFS.getDefaultFactory().defaultFileSystem();
-		VFile file = vfs.newFile(path);
-
-		(new DefaultXGitBootstrap()).boot();
-
-		LocalRepo repo = (new DefaultLocalRepoFactory()).createRepo(file);
-		LocalObjectBank bank = repo.getObjectBank();
-
-		byte[] ba = "hello, world".getBytes();
-		InputStream in = new ByteArrayInputStream(ba);
-
 		try {
+
+			String path = "/home/xukun/snowflake_VMs/the1st/.git";
+			// path = "/home/xukun/git/xgit/.git";
+
+			VFileSystem vfs = VFS.getDefaultFactory().defaultFileSystem();
+			VFile file = vfs.newFile(path);
+
+			(new DefaultXGitBootstrap()).boot();
+
+			LocalRepo repo;
+			if (file.exists()) {
+				repo = (new DefaultLocalRepoFactory()).openRepo(file);
+			} else {
+				repo = (new DefaultLocalRepoFactory()).initRepo(file, false);
+			}
+
+			LocalObjectBank bank = repo.getObjectBank();
+
+			byte[] ba = "hello, world".getBytes();
+			InputStream in = new ByteArrayInputStream(ba);
+
 			LocalObject go = bank.addObject("blob", ba.length, in);
+
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (XGitException e) {
 			e.printStackTrace();
 		}
 
