@@ -1,12 +1,18 @@
 package test.ananas.lib.xgit;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.util.PropertiesLoader;
-import ananas.lib.xgit.repo.local.DefaultLocalRepoFactory;
-import ananas.lib.xgit.repo.local.LocalObjectBank;
-import ananas.lib.xgit.repo.local.LocalRepo;
+import ananas.xgit.boot.DefaultXGitBootstrap;
+import ananas.xgit.repo.local.DefaultLocalRepoFactory;
+import ananas.xgit.repo.local.LocalObject;
+import ananas.xgit.repo.local.LocalObjectBank;
+import ananas.xgit.repo.local.LocalRepo;
 
 public class TestXGit implements Runnable {
 
@@ -30,9 +36,19 @@ public class TestXGit implements Runnable {
 		VFileSystem vfs = VFS.getDefaultFactory().defaultFileSystem();
 		VFile file = vfs.newFile(path);
 
+		(new DefaultXGitBootstrap()).boot();
+
 		LocalRepo repo = (new DefaultLocalRepoFactory()).createRepo(file);
 		LocalObjectBank bank = repo.getObjectBank();
-		// bank.getObject( id ) ;
+
+		byte[] ba = "hello, world".getBytes();
+		InputStream in = new ByteArrayInputStream(ba);
+
+		try {
+			LocalObject go = bank.addObject("blob", ba.length, in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
