@@ -8,6 +8,7 @@ import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.util.PropertiesLoader;
+import ananas.lib.xgit.util.StreamPump;
 import ananas.xgit.XGitException;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.local.DefaultLocalRepoFactory;
@@ -55,6 +56,13 @@ public class TestXGit implements Runnable {
 			InputStream in = new ByteArrayInputStream(ba);
 
 			LocalObject go = bank.addObject("blob", ba.length, in);
+			InputStream in2 = go.openRawInputStream();
+			System.out.println("repo co:");
+			(new StreamPump(in2, System.out)).run();
+			System.out.println();
+			System.out.println("id     = " + go.id());
+			System.out.println("type   = " + go.type());
+			System.out.println("length = " + go.length());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,5 +71,4 @@ public class TestXGit implements Runnable {
 		}
 
 	}
-
 }

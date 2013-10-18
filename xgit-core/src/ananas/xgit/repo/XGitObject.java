@@ -15,8 +15,14 @@ public interface XGitObject {
 
 	long length();
 
+	/**
+	 * @return the zip input stream
+	 * */
 	InputStream openInputStream();
 
+	/**
+	 * @return the zip output stream
+	 * */
 	OutputStream openOutputStream();
 
 }

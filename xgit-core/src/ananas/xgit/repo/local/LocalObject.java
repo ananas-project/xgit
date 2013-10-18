@@ -1,16 +1,19 @@
 package ananas.xgit.repo.local;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
+import ananas.lib.io.vfs.VFile;
 import ananas.xgit.repo.XGitObject;
 
 public interface LocalObject extends XGitObject {
 
 	LocalObjectBank getBank();
 
-	InputStream openRawInputStream();
+	InputStream openRawInputStream() throws IOException;
 
-	OutputStream openRawOutputStream();
+	// OutputStream openRawOutputStream();
+
+	VFile getZipFile();
 
 }
