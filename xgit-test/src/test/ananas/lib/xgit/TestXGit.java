@@ -1,6 +1,7 @@
 package test.ananas.lib.xgit;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -52,17 +53,26 @@ public class TestXGit implements Runnable {
 
 			LocalObjectBank bank = repo.getObjectBank();
 
-			byte[] ba = "hello, world".getBytes();
-			InputStream in = new ByteArrayInputStream(ba);
+			String[] list = { "hello1.txt", "hello2.txt" };
+			for (String filename : list) {
 
-			LocalObject go = bank.addObject("blob", ba.length, in);
-			InputStream in2 = go.openRawInputStream();
-			System.out.println("repo co:");
-			(new StreamPump(in2, System.out)).run();
-			System.out.println();
-			System.out.println("id     = " + go.id());
-			System.out.println("type   = " + go.type());
-			System.out.println("length = " + go.length());
+				InputStream in = this.getClass().getResourceAsStream(filename);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				(new StreamPump(in, baos)).run();
+				byte[] ba = baos.toByteArray();
+
+				in = new ByteArrayInputStream(ba);
+				LocalObject go = bank.addObject("blob", ba.length, in);
+				InputStream in2 = go.openRawInputStream();
+				// System.out.println("repo co:");
+				// (new StreamPump(in2, System.out)).run();
+				in2.close();
+				System.out.println();
+				System.out.println("id     = " + go.id());
+				System.out.println("type   = " + go.type());
+				System.out.println("length = " + go.length());
+
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

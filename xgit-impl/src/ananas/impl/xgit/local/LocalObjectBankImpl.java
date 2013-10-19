@@ -127,4 +127,8 @@ public class LocalObjectBankImpl implements LocalObjectBank {
 		return this._dir;
 	}
 
+	public String toString() {
+		return ("[" + this.getClass().getSimpleName() + " " + this._dir + "]");
+	}
+
 }

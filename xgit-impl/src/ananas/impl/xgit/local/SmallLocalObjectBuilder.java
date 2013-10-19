@@ -35,6 +35,9 @@ public class SmallLocalObjectBuilder extends AbstractLocalObjectBuilder {
 		out2zip.write(_baos.toByteArray());
 		out2zip.close();
 
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
 		VFileOutputStream out = new VFileOutputStream(tmp);
 		out.write(zipBuf.toByteArray());
 		out.close();
@@ -47,6 +50,5 @@ public class SmallLocalObjectBuilder extends AbstractLocalObjectBuilder {
 	protected OutputStream openDataOutput() {
 		return _baos;
 	}
-
 
 }

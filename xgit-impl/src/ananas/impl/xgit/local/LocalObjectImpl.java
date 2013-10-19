@@ -32,7 +32,7 @@ public class LocalObjectImpl implements LocalObject {
 
 		VFile dir = bank.getBankDirectory();
 		VFileSystem vfs = dir.getVFS();
-		this._file = vfs.newFile(dir, p1 + vfs.pathSeparator() + p2);
+		this._file = vfs.newFile(dir, p1 + vfs.separator() + p2);
 
 	}
 

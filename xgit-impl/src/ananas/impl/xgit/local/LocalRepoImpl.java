@@ -46,7 +46,7 @@ public class LocalRepoImpl implements LocalRepo {
 		if (this._is_init) {
 			return;
 		}
-		String name = "";
+		String name = "objects";
 		VFile dir = this._repo_dir.getVFS().newFile(_repo_dir, name);
 		this._object_bank = new LocalObjectBankImpl(dir);
 		this._is_init = true;
@@ -55,6 +55,10 @@ public class LocalRepoImpl implements LocalRepo {
 	@Override
 	public VFile getRepoDirectory() {
 		return this._repo_dir;
+	}
+
+	public String toString() {
+		return ("[" + this.getClass().getSimpleName() + " " + this._repo_dir + "]");
 	}
 
 }
