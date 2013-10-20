@@ -11,4 +11,8 @@ public interface LocalRepo extends Repo {
 
 	VFile getRepoDirectory();
 
+	ExtIndexBank getExtIndexBank();
+
+	WorkingDirectory getWorkingDirectory();
+
 }

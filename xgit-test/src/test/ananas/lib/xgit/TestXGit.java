@@ -74,6 +74,8 @@ public class TestXGit implements Runnable {
 
 			}
 
+			repo.getExtIndexBank().scan(null, true);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (XGitException e) {

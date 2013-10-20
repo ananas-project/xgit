@@ -12,4 +12,8 @@ public interface Repo {
 
 	URI getRepoURI();
 
+	// CommandManager getCommandManager();
+
+	// APIManager getAPIManager();
+
 }
