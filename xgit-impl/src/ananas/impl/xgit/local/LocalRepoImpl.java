@@ -3,6 +3,7 @@ package ananas.impl.xgit.local;
 import java.net.URI;
 
 import ananas.lib.io.vfs.VFile;
+import ananas.lib.io.vfs.VFileSystem;
 import ananas.xgit.repo.local.ExtIndexBank;
 import ananas.xgit.repo.local.LocalObjectBank;
 import ananas.xgit.repo.local.LocalRepo;
@@ -50,10 +51,12 @@ public class LocalRepoImpl implements LocalRepo {
 		if (this._is_init) {
 			return;
 		}
-		String name = "objects";
-		VFile dir = this._repo_dir.getVFS().newFile(_repo_dir, name);
-		this._object_bank = new LocalObjectBankImpl(dir);
-		this._ext_index_bank = new ExtIndexBankImpl(this);
+
+		VFileSystem vfs = this._repo_dir.getVFS();
+		this._object_bank = new LocalObjectBankImpl(vfs.newFile(_repo_dir,
+				"objects"));
+		this._ext_index_bank = new ExtIndexBankImpl(this, vfs.newFile(
+				_repo_dir, "xgit/index"));
 		this._working_directory = _is_bare ? null : (new WorkingDirectoryImpl(
 				_repo_dir.getParentFile()));
 
