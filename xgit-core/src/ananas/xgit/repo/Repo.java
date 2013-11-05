@@ -2,7 +2,9 @@ package ananas.xgit.repo;
 
 import java.net.URI;
 
-public interface Repo {
+import ananas.lib.juke.Component;
+
+public interface Repo extends Component {
 
 	RepoFactory getFactory();
 

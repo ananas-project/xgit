@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import ananas.lib.io.vfs.VFile;
+import ananas.lib.juke.Kernel;
 import ananas.lib.util.SingletonLoader;
 import ananas.xgit.XGitException;
 import ananas.xgit.repo.Repo;
@@ -18,19 +19,21 @@ public class DefaultLocalRepoFactory implements LocalRepoFactory {
 	}
 
 	@Override
-	public Repo openRepo(URI uri) throws IOException, XGitException {
-		return _inner.openRepo(uri);
-	}
-
-	@Override
-	public LocalRepo openRepo(VFile file) throws IOException, XGitException {
-		return _inner.openRepo(file);
-	}
-
-	@Override
-	public LocalRepo initRepo(VFile file, boolean bare) throws IOException,
+	public Repo openRepo(Kernel kernel, URI uri) throws IOException,
 			XGitException {
-		return _inner.initRepo(file, bare);
+		return _inner.openRepo(kernel, uri);
+	}
+
+	@Override
+	public LocalRepo openRepo(Kernel kernel, VFile file) throws IOException,
+			XGitException {
+		return _inner.openRepo(kernel, file);
+	}
+
+	@Override
+	public LocalRepo initRepo(Kernel kernel, VFile file, boolean bare)
+			throws IOException, XGitException {
+		return _inner.initRepo(kernel, file, bare);
 	}
 
 }
