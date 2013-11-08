@@ -14,7 +14,6 @@ import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileInputStream;
 import ananas.lib.io.vfs.VFileOutputStream;
 import ananas.lib.io.vfs.VFileSystem;
-import ananas.lib.juke.Kernel;
 import ananas.xgit.XGitException;
 import ananas.xgit.repo.Repo;
 import ananas.xgit.repo.local.LocalRepo;
@@ -167,16 +166,14 @@ public class LocalRepoFactoryImpl implements LocalRepoFactory {
 	}
 
 	@Override
-	public Repo openRepo(Kernel kernel, URI uri) throws IOException,
-			XGitException {
+	public Repo openRepo(URI uri) throws IOException, XGitException {
 		VFileSystem vfs = VFS.getDefaultFactory().defaultFileSystem()
 				.getFactory().defaultFileSystem();
-		return this.openRepo(kernel, vfs.newFile(uri));
+		return this.openRepo(vfs.newFile(uri));
 	}
 
 	@Override
-	public LocalRepo openRepo(Kernel kernel, VFile dir) throws IOException,
-			XGitException {
+	public LocalRepo openRepo(VFile dir) throws IOException, XGitException {
 
 		VFile conf = dir.getVFS().newFile(dir, "config");
 
@@ -210,18 +207,14 @@ public class LocalRepoFactoryImpl implements LocalRepoFactory {
 			throw new XGitException("it's a git but not a xgit repo : " + dir);
 		}
 
-		if (kernel == null) {
-			kernel = Kernel.Factory.create();
-		}
-
 		// do open
-		LocalRepo repo = new LocalRepoImpl(kernel, this, dir, bare);
+		LocalRepo repo = new LocalRepoImpl(this, dir, bare);
 		return repo;
 	}
 
 	@Override
-	public LocalRepo initRepo(Kernel kernel, VFile dir, boolean bare)
-			throws XGitException, IOException {
+	public LocalRepo initRepo(VFile dir, boolean bare) throws XGitException,
+			IOException {
 
 		if (dir.exists()) {
 			throw new XGitException("the repo directory is exists : " + dir);
@@ -258,11 +251,7 @@ public class LocalRepoFactoryImpl implements LocalRepoFactory {
 		prop.store(out, "xgit config");
 		out.close();
 
-		if (kernel == null) {
-			kernel = Kernel.Factory.create();
-		}
-
-		LocalRepo repo = new LocalRepoImpl(kernel, this, dir, bare);
+		LocalRepo repo = new LocalRepoImpl(this, dir, bare);
 		System.out.println("init xgit repo at " + dir);
 		return repo;
 	}

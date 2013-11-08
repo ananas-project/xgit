@@ -4,7 +4,6 @@ import java.net.URI;
 
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
-import ananas.lib.juke.Kernel;
 import ananas.xgit.repo.local.ExtIndexBank;
 import ananas.xgit.repo.local.LocalObjectBank;
 import ananas.xgit.repo.local.LocalRepo;
@@ -20,14 +19,11 @@ public class LocalRepoImpl implements LocalRepo {
 	private LocalObjectBank _object_bank;
 	private ExtIndexBank _ext_index_bank;
 	private WorkingDirectory _working_directory;
-	private final Kernel _kernel;
 
-	public LocalRepoImpl(Kernel ker, LocalRepoFactory factory, VFile file,
-			boolean bare) {
+	public LocalRepoImpl(LocalRepoFactory factory, VFile file, boolean bare) {
 		this._factory = factory;
 		this._repo_dir = file;
 		this._is_bare = bare;
-		this._kernel = ker;
 	}
 
 	@Override
@@ -86,11 +82,6 @@ public class LocalRepoImpl implements LocalRepo {
 	public WorkingDirectory getWorkingDirectory() {
 		__init();
 		return this._working_directory;
-	}
-
-	@Override
-	public Kernel getKernel() {
-		return this._kernel;
 	}
 
 }
