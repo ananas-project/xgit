@@ -2,9 +2,11 @@ package ananas.impl.xgit.local;
 
 import java.net.URI;
 
+import ananas.impl.xgit.local.indexer.def.ExtIndexerFactory;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
-import ananas.xgit.repo.local.ExtIndexBank;
+import ananas.xgit.repo.local.Indexer;
+import ananas.xgit.repo.local.IndexerFactory;
 import ananas.xgit.repo.local.LocalObjectBank;
 import ananas.xgit.repo.local.LocalRepo;
 import ananas.xgit.repo.local.LocalRepoFactory;
@@ -16,8 +18,6 @@ public class LocalRepoImpl implements LocalRepo {
 	private final VFile _repo_dir;
 	private final boolean _is_bare;
 	private boolean _is_init = false;
-	private LocalObjectBank _object_bank;
-	private ExtIndexBank _ext_index_bank;
 	private WorkingDirectory _working_directory;
 
 	public LocalRepoImpl(LocalRepoFactory factory, VFile file, boolean bare) {
@@ -44,7 +44,10 @@ public class LocalRepoImpl implements LocalRepo {
 	@Override
 	public LocalObjectBank getObjectBank() {
 		__init();
-		return this._object_bank;
+		VFile repo = this.getRepoDirectory();
+		VFileSystem vfs = repo.getVFS();
+		VFile dir = vfs.newFile(repo, "objects");
+		return new LocalObjectBankImpl(dir);
 	}
 
 	private void __init() {
@@ -52,11 +55,6 @@ public class LocalRepoImpl implements LocalRepo {
 			return;
 		}
 
-		VFileSystem vfs = this._repo_dir.getVFS();
-		this._object_bank = new LocalObjectBankImpl(vfs.newFile(_repo_dir,
-				"objects"));
-		this._ext_index_bank = new ExtIndexBankImpl(this, vfs.newFile(
-				_repo_dir, "xgit/index"));
 		this._working_directory = _is_bare ? null : (new WorkingDirectoryImpl(
 				_repo_dir.getParentFile()));
 
@@ -73,15 +71,16 @@ public class LocalRepoImpl implements LocalRepo {
 	}
 
 	@Override
-	public ExtIndexBank getExtIndexBank() {
-		__init();
-		return this._ext_index_bank;
-	}
-
-	@Override
 	public WorkingDirectory getWorkingDirectory() {
 		__init();
 		return this._working_directory;
+	}
+
+	@Override
+	public Indexer getIndexer() {
+		__init();
+		IndexerFactory ifac = new ExtIndexerFactory();
+		return ifac.create(this);
 	}
 
 }

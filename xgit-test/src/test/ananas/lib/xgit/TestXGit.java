@@ -16,6 +16,7 @@ import ananas.xgit.repo.local.DefaultLocalRepoFactory;
 import ananas.xgit.repo.local.LocalObject;
 import ananas.xgit.repo.local.LocalObjectBank;
 import ananas.xgit.repo.local.LocalRepo;
+import ananas.xgit.repo.local.WorkingDirectory;
 
 public class TestXGit implements Runnable {
 
@@ -74,7 +75,8 @@ public class TestXGit implements Runnable {
 
 			}
 
-			repo.getExtIndexBank().scan(null, true);
+			WorkingDirectory dir = repo.getWorkingDirectory();
+			repo.getIndexer().scan(dir.getDirectory(), true);
 
 		} catch (IOException e) {
 			e.printStackTrace();

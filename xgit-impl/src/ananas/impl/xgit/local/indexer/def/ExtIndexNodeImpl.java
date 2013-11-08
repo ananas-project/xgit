@@ -1,4 +1,4 @@
-package ananas.impl.xgit.local;
+package ananas.impl.xgit.local.indexer.def;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,19 +6,19 @@ import java.io.InputStream;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileInputStream;
 import ananas.xgit.repo.ObjectId;
-import ananas.xgit.repo.local.ExtIndexInfo;
+import ananas.xgit.repo.local.IndexNode;
+import ananas.xgit.repo.local.Indexer;
 import ananas.xgit.repo.local.LocalObject;
-import ananas.xgit.repo.local.LocalRepo;
 
-public class ExtIndexInfoImpl implements ExtIndexInfo {
+public class ExtIndexNodeImpl implements IndexNode {
 
-	private final LocalRepo _repo;
 	private final VFile _target_file;
 	private final VFile _meta_file;
 	private final Meta _meta;
+	private final Indexer _indexer;
 
-	public ExtIndexInfoImpl(LocalRepo repo, VFile target, VFile meta) {
-		this._repo = repo;
+	public ExtIndexNodeImpl(Indexer indexer, VFile target, VFile meta) {
+		this._indexer = indexer;
 		this._target_file = target;
 		this._meta_file = meta;
 		this._meta = new Meta(meta);
@@ -53,7 +53,8 @@ public class ExtIndexInfoImpl implements ExtIndexInfo {
 			}
 
 			InputStream in = new VFileInputStream(tar);
-			LocalObject go = _repo.getObjectBank().addObject("blob", len1, in);
+			LocalObject go = _indexer.getRepo().getObjectBank()
+					.addObject("blob", len1, in);
 			in.close();
 
 			meta.update(lm1, go.id(), len1);
@@ -120,5 +121,11 @@ public class ExtIndexInfoImpl implements ExtIndexInfo {
 		public long lastModified() {
 			return this._last_modified;
 		}
+	}
+
+	@Override
+	public Indexer getIndexer() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

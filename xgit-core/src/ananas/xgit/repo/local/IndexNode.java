@@ -5,7 +5,9 @@ import java.io.IOException;
 import ananas.lib.io.vfs.VFile;
 import ananas.xgit.repo.ObjectId;
 
-public interface ExtIndexInfo {
+public interface IndexNode {
+
+	Indexer getIndexer();
 
 	VFile getTargetFile();
 
