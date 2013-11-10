@@ -1,17 +1,14 @@
 package ananas.xgit.repo.local;
 
-import java.io.IOException;
-
 import ananas.lib.io.vfs.VFile;
+import ananas.xgit.XGitException;
 
 public interface Indexer {
 
 	LocalRepo getRepo();
 
-	int scan(VFile dir, boolean r) throws IOException;
+	IndexNode getNode(VFile file) throws XGitException;
 
-	IndexNode get(VFile file);
-
-	VFile getIndexFile();
+	VFile getIndexDB();
 
 }

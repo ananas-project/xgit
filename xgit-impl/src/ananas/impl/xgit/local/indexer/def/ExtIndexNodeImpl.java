@@ -1,14 +1,11 @@
 package ananas.impl.xgit.local.indexer.def;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import ananas.lib.io.vfs.VFile;
-import ananas.lib.io.vfs.VFileInputStream;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.IndexNode;
 import ananas.xgit.repo.local.Indexer;
-import ananas.xgit.repo.local.LocalObject;
 
 public class ExtIndexNodeImpl implements IndexNode {
 
@@ -34,53 +31,9 @@ public class ExtIndexNodeImpl implements IndexNode {
 		return this._meta.id();
 	}
 
-	@Override
-	public void add() throws IOException {
-
-		System.out.println("add " + _target_file);
-
-		Meta meta = __get_meta();
-		VFile tar = _target_file;
-		if (tar.exists()) {
-			long len1, len2, lm1, lm2;
-			len1 = tar.length();
-			lm1 = tar.lastModified();
-			len2 = meta.length();
-			lm2 = meta.lastModified();
-			if (len1 == len2 && lm1 == lm2) {
-				// not modify
-				return;
-			}
-
-			InputStream in = new VFileInputStream(tar);
-			LocalObject go = _indexer.getRepo().getObjectBank()
-					.addObject("blob", len1, in);
-			in.close();
-
-			meta.update(lm1, go.id(), len1);
-			meta.save();
-
-		} else {
-			// delete meta
-		}
-
-	}
-
 	private Meta __get_meta() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void remove() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
 	}
 
 	class Meta {
@@ -127,5 +80,11 @@ public class ExtIndexNodeImpl implements IndexNode {
 	public Indexer getIndexer() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void add(boolean r) throws IOException {
+		// TODO Auto-generated method stub
+
 	}
 }

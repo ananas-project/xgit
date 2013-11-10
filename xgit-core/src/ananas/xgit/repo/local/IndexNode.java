@@ -13,10 +13,6 @@ public interface IndexNode {
 
 	ObjectId getObjectId();
 
-	void add() throws IOException;
-
-	void remove();
-
-	void update();
+	void add(boolean r) throws IOException;
 
 }

@@ -13,6 +13,8 @@ import ananas.lib.xgit.util.StreamPump;
 import ananas.xgit.XGitException;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.local.DefaultLocalRepoFactory;
+import ananas.xgit.repo.local.IndexNode;
+import ananas.xgit.repo.local.Indexer;
 import ananas.xgit.repo.local.LocalObject;
 import ananas.xgit.repo.local.LocalObjectBank;
 import ananas.xgit.repo.local.LocalRepo;
@@ -75,8 +77,10 @@ public class TestXGit implements Runnable {
 
 			}
 
-			WorkingDirectory dir = repo.getWorkingDirectory();
-			repo.getIndexer().scan(dir.getDirectory(), true);
+			WorkingDirectory wd = repo.getWorkingDirectory();
+			Indexer indexer = repo.getIndexer();
+			IndexNode node = indexer.getNode(wd.getDirectory());
+			node.add(true);
 
 		} catch (IOException e) {
 			e.printStackTrace();

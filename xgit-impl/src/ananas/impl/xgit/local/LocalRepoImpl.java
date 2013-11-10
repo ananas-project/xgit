@@ -33,7 +33,7 @@ public class LocalRepoImpl implements LocalRepo {
 
 	@Override
 	public URI getRepoURI() {
-		return this._repo_dir.getURI();
+		return this._repo_dir.toURI();
 	}
 
 	@Override
