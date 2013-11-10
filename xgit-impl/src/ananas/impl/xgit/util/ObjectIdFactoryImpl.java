@@ -1,4 +1,4 @@
-package ananas.lib.xgit.util;
+package ananas.impl.xgit.util;
 
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.ObjectIdFactory;

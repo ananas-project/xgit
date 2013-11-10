@@ -1,9 +1,9 @@
 package ananas.impl.xgit.local.indexer.def;
 
+import java.io.IOException;
+
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
-import ananas.lib.io.vfs.VPathAbsolute;
-import ananas.lib.io.vfs.VPathRelative;
 import ananas.xgit.XGitException;
 import ananas.xgit.repo.local.IndexNode;
 import ananas.xgit.repo.local.Indexer;
@@ -13,23 +13,24 @@ public class ExtIndexerImpl implements Indexer {
 
 	private final LocalRepo _repo;
 	private final VFile _db_file;
-
-	// private final VPathAbsolute _db_path;
-	private final VPathAbsolute _wk_path;
-	private final VPathAbsolute _rp_path;
+	private final String _wk_path;
+	private final String _rp_path;
 
 	public ExtIndexerImpl(LocalRepo repo, VFile indexFile) {
 		this._repo = repo;
 		this._db_file = indexFile;
+		this._wk_path = this.__can_path(repo.getWorkingDirectory()
+				.getDirectory());
+		this._rp_path = this.__can_path(repo.getRepoDirectory());
+	}
 
-		VFileSystem vfs = indexFile.getVFS();
-
-		// this._db_path = vfs.newAbsolutePath(indexFile.getAbsolutePath());
-		this._wk_path = vfs.newAbsolutePath(repo.getWorkingDirectory()
-				.getDirectory().getAbsolutePath());
-		this._rp_path = vfs.newAbsolutePath(repo.getRepoDirectory()
-				.getAbsolutePath());
-
+	private String __can_path(VFile path) {
+		try {
+			return path.getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -44,21 +45,90 @@ public class ExtIndexerImpl implements Indexer {
 
 	@Override
 	public IndexNode getNode(VFile file) throws XGitException {
-
-		VFileSystem vfs = file.getVFS();
-		VPathAbsolute fullpath = vfs.newAbsolutePath(file.getAbsolutePath());
-
-		if (!fullpath.isSubOf(this._wk_path)) {
-			throw new XGitException("the file not in the working dir : " + file);
+		String pathCan = null;
+		try {
+			pathCan = file.getCanonicalPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		if (fullpath.isSubOf(this._rp_path)) {
-			throw new XGitException("the file in the repo dir : " + file);
+		{
+			String pathAbs = file.getAbsolutePath();
+			if (!pathAbs.equals(pathCan)) {
+				VFileSystem vfs = file.getVFS();
+				file = vfs.newFile(pathCan);
+			}
+		}
+		if (!__is_working_file(pathCan)) {
+			throw new XGitException("the file is not a working node : " + file);
+		}
+		String offset = __get_offset(pathCan);
+		return new ExtIndexNodeImpl(this, file, offset);
+	}
+
+	private String __get_offset(String path) {
+		final int l1, l2;
+		l1 = this._wk_path.length();
+		l2 = path.length();
+		if (l1 < l2)
+			return path.substring(l1 + 1);
+		else
+			return "";
+	}
+
+	private boolean __is_working_file(String path) {
+		if (!path.startsWith(this._wk_path)) {
+			return false;
+		}
+		if (path.startsWith(this._rp_path)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void add(IndexNode node, boolean r) throws IOException,
+			XGitException {
+		VFile tar = node.getTargetFile();
+		if (r) {
+			this.__add_r(tar, 0);
+		} else {
+			node.add();
+		}
+	}
+
+	interface Const {
+
+		int add_depth_limit = 48;
+	}
+
+	private void __add_r(VFile tar, int depth) throws IOException,
+			XGitException {
+
+		String name = tar.getName();
+		if (".".equals(name)) {
+			return;
+		} else if ("..".equals(name)) {
+			return;
+		} else if (".git".equalsIgnoreCase(name)) {
+			return;
 		}
 
-		VPathRelative offset = fullpath.getOffset(this._wk_path);
-		VFile meta = vfs.newFile(this._db_file, offset.toString());
+		if (depth > Const.add_depth_limit) {
+			throw new RuntimeException("the path is too deep : " + tar);
+		}
 
-		return new ExtIndexNodeImpl(this, file, meta);
+		if (tar.isDirectory()) {
+			VFile[] chs = tar.listFiles();
+			for (VFile ch : chs) {
+
+				this.__add_r(ch, depth + 1);
+			}
+		}
+
+		IndexNode node = this.getNode(tar);
+		node.add();
+
 	}
 
 }
