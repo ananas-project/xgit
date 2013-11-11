@@ -2,6 +2,8 @@ package ananas.impl.xgit.local.indexer.def;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import ananas.impl.xgit.util.Hasher;
@@ -75,6 +77,7 @@ public class ExtIndexNodeImpl implements IndexNode {
 		String last_mod = "last-modified";
 		String length = "length";
 		String type = "type";
+		String children = "child-nodes";
 	}
 
 	class PropGet {
@@ -108,6 +111,23 @@ public class ExtIndexNodeImpl implements IndexNode {
 			String v = prop.getProperty(key);
 			return ((v == null) ? "" : v);
 		}
+
+		public String[] getStringArray(String key, char sp) {
+			String v = prop.getProperty(key);
+			if (v == null) {
+				return null;
+			}
+			String[] array = v.split("" + sp);
+			List<String> list = new ArrayList<String>();
+			int len = array.length;
+			for (int i = 0; i < len; i++) {
+				String item = array[i];
+				item = item.trim();
+				if (item.length() > 0)
+					list.add(item);
+			}
+			return list.toArray(new String[list.size()]);
+		}
 	}
 
 	class Meta {
@@ -119,6 +139,7 @@ public class ExtIndexNodeImpl implements IndexNode {
 		private long _length;
 		private ObjectId _hash_id;
 		private String _type;
+		private String[] _children;
 
 		public Meta(VFile file, String offset) {
 			this._meta_file = file;
@@ -131,6 +152,10 @@ public class ExtIndexNodeImpl implements IndexNode {
 
 		public long length() {
 			return this._length;
+		}
+
+		public char __array_sp(VFile file) {
+			return file.getVFS().separatorChar();
 		}
 
 		public void save() throws IOException {
@@ -148,6 +173,20 @@ public class ExtIndexNodeImpl implements IndexNode {
 			prop.setProperty(Key.type, "" + this._type);
 			prop.setProperty(Key.length, "" + this._length);
 			prop.setProperty(Key.last_mod, "" + this._last_modified);
+
+			String[] list = this._children;
+			if (list != null) {
+				final char sp = this.__array_sp(file);
+				StringBuilder sb = new StringBuilder();
+				for (String ch : list) {
+					if (".git".equals(ch))
+						continue;
+					sb.append(ch);
+					sb.append(sp);
+					sb.append(' ');
+				}
+				prop.setProperty(Key.children, sb.toString());
+			}
 
 			prop.store(out, file.getName());
 
@@ -167,12 +206,14 @@ public class ExtIndexNodeImpl implements IndexNode {
 			prop.load(in);
 			in.close();
 
+			char sp = this.__array_sp(file);
 			PropGet pget = new PropGet(prop);
 
 			this._length = pget.getLong(Key.length);
 			this._hash_id = pget.getObjectId(Key.id);
 			this._last_modified = pget.getLong(Key.last_mod);
 			this._type = pget.getString(Key.type);
+			this._children = pget.getStringArray(Key.children, sp);
 		}
 
 		public void update(long lastModif, ObjectId id, long length) {
@@ -212,6 +253,10 @@ public class ExtIndexNodeImpl implements IndexNode {
 		public void setObjectId(ObjectId id) {
 			this._hash_id = id;
 		}
+
+		public void setChildren(String[] list) {
+			this._children = list;
+		}
 	}
 
 	@Override
@@ -235,10 +280,13 @@ public class ExtIndexNodeImpl implements IndexNode {
 
 		if (tar.isDirectory()) {
 
+			String[] list = tar.list();
+
 			meta.setLength(0);
 			meta.setType("tree");
 			meta.setLastModified(tar.lastModified());
 			meta.setObjectId(null);
+			meta.setChildren(list);
 
 		} else {
 			String type = "blob";

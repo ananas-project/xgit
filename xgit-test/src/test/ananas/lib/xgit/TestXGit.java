@@ -77,10 +77,15 @@ public class TestXGit implements Runnable {
 
 			}
 
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			System.out.println("do add");
+
 			WorkingDirectory wd = repo.getWorkingDirectory();
 			Indexer indexer = repo.getIndexer();
 			IndexNode node = indexer.getNode(wd.getDirectory());
 			indexer.add(node, true);
+
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 		} catch (IOException e) {
 			e.printStackTrace();
