@@ -16,7 +16,7 @@ public class DefaultBox implements IBox {
 
 	@Override
 	public IObject getObject(ObjectId id) {
-		return this.getObject(id);
+		return impl.getObject(id);
 	}
 
 	@Override

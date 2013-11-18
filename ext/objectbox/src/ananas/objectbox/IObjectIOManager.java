@@ -6,8 +6,6 @@ public interface IObjectIOManager {
 
 	IObjectSaver getSaver(Class<?> cls);
 
-	IObjectLoader registerLoader(Class<?> cls);
-
-	IObjectSaver registerSaver(Class<?> cls);
+	void register(Class<?> cls, IObjectLS ls);
 
 }

@@ -3,17 +3,24 @@ package test.objectbox;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 
 import org.junit.Test;
+
+import com.alibaba.fastjson.JSONObject;
 
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.objectbox.DefaultBox;
 import ananas.objectbox.IBox;
 import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectLS;
+import ananas.objectbox.body.json.JsonBody;
+import ananas.objectbox.body.json.JsonBodyLS;
 import ananas.xgit.boot.DefaultXGitBootstrap;
+import ananas.xgit.repo.ObjectId;
 
-public class TObjectBox {
+public class TObjectBox implements JsonBody {
 
 	@Test
 	public void test() {
@@ -27,8 +34,21 @@ public class TObjectBox {
 		System.out.println("test/repo at " + file);
 		IBox box = new DefaultBox(file);
 
-		IObject obj = box.newObject(this.getClass(), null);
+		Class<?> cls = this.getClass();
+		IObjectLS ls = new JsonBodyLS();
+		box.getObjectIOManager().register(cls, ls);
+
+		IObject obj = box.newObject(cls, null);
 		System.out.println("body = " + obj.getBodyFile());
+
+		ObjectId id = obj.getId();
+		obj = box.getObject(id);
+		Object body = obj.getBody();
+		Map<String, String> head = obj.getHead();
+		System.out.println("head=" + head);
+		System.out.println("body=" + body);
+		obj.save();
+		obj.load();
 
 	}
 
@@ -62,6 +82,18 @@ public class TObjectBox {
 	public static void main(String[] arg) {
 
 		(new TObjectBox()).test();
+	}
+
+	@Override
+	public void onLoad(JSONObject root) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public JSONObject onSave(JSONObject root) {
+		// TODO Auto-generated method stub
+		return root;
 	}
 
 }
