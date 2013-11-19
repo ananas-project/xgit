@@ -1,41 +1,43 @@
 package ananas.objectbox.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.objectbox.IBox;
-import ananas.objectbox.IObjectBody;
-import ananas.objectbox.IObjectHead;
-import ananas.objectbox.IObjectIOManager;
-import ananas.objectbox.IObjectLoader;
-import ananas.objectbox.IObjectSaver;
+import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectCtrl;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
 
-public class DefaultObj implements IObjectHead {
+public class DefaultObj implements IObject {
 
 	private final ObjectId _id;
 	private final IBox _box;
 	private final LocalObject _go;
+	private final VFile _head_file;
+	private final VFile _body_file;
 
-	private VFile _head_file;
-	private VFile _body_file;
-	private IObjectSaver _saver;
-	private IObjectLoader _loader;
-	private IObjectBody _body_object;
-	private Class<?> _body_class;
-	private long _create_time;
+	private IObjectCtrl _ctrl;
+	private Class<?> _ctrl_class;
 	private Map<String, String> _head;
-	private boolean _is_mod;
+	private List<String> _headers;
 
 	public DefaultObj(IBox box, LocalObject go) {
 		this._box = box;
 		this._id = go.id();
 		this._go = go;
+
+		VFile hfile = go.getZipFile();
+		VFileSystem vfs = hfile.getVFS();
+		this._head_file = hfile;
+		this._body_file = vfs.newFile(hfile.getParentFile(), hfile.getName()
+				+ ".body");
 	}
 
 	@Override
@@ -67,85 +69,23 @@ public class DefaultObj implements IObjectHead {
 				map.put(key, val);
 			}
 			this._head = map;
-
-			// time
-			this._create_time = Long.parseLong(map.get(HeadKey.create_time));
+			this._headers = new ArrayList<String>(map.keySet());
 
 			// class & object
 			String clsName = map.get(HeadKey.ob_class);
 			Class<?> cls = Class.forName(clsName);
-			this._body_class = cls;
-			IObjectBody body_obj = (IObjectBody) cls.newInstance();
-			body_obj.bindHead(this);
-			this._body_object = body_obj;
+			this._ctrl_class = cls;
+			IObjectCtrl ctrl = (IObjectCtrl) cls.newInstance();
+			// body_obj.bindHead(this);
+			this._ctrl = ctrl;
 
-			// io
-			IObjectIOManager iom = this._box.getObjectIOManager();
-			IObjectLoader loader = iom.getLoader(cls);
-			IObjectSaver saver = iom.getSaver(cls);
-			this._loader = loader;
-			this._saver = saver;
-
-			// file
-			VFile headfile, bodyfile;
-			headfile = go.getZipFile();
-			VFileSystem vfs = headfile.getVFS();
-			String extName = saver.getExtName();
-			String bodyName = headfile.getName() + "." + extName;
-			bodyfile = vfs.newFile(headfile.getParentFile(), bodyName);
-			this._head_file = headfile;
-			this._body_file = bodyfile;
-
-			this.load();
+			// load header
+			ctrl.onLoad(this);
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-	}
-
-	@Override
-	public Map<String, String> getFields() {
-		__init();
-		return new HashMap<String, String>(this._head);
-	}
-
-	@Override
-	public long getCreateTime() {
-		__init();
-		return this._create_time;
-	}
-
-	@Override
-	public IObjectBody getBody() {
-		__init();
-		return this._body_object;
-	}
-
-	@Override
-	public void load() {
-		__init();
-		IObjectHead obj = this;
-		this.getLoader().load(obj);
-	}
-
-	@Override
-	public void save() {
-		__init();
-		IObjectHead obj = this;
-		this.getSaver().save(obj);
-	}
-
-	@Override
-	public IObjectLoader getLoader() {
-		__init();
-		return this._loader;
-	}
-
-	@Override
-	public IObjectSaver getSaver() {
-		__init();
-		return this._saver;
 	}
 
 	@Override
@@ -161,19 +101,28 @@ public class DefaultObj implements IObjectHead {
 	}
 
 	@Override
-	public void setModified(boolean isMod) {
-		this._is_mod = isMod;
-	}
-
-	@Override
-	public boolean isModified() {
-		return this._is_mod;
-	}
-
-	@Override
-	public Class<?> getBodyClass() {
+	public String getHeader(String key) {
 		__init();
-		return this._body_class;
+		return this._head.get(key);
+	}
+
+	@Override
+	public String[] listHeaders() {
+		__init();
+		List<String> list = this._headers;
+		return list.toArray(new String[list.size()]);
+	}
+
+	@Override
+	public Class<?> getControllerClass() {
+		__init();
+		return this._ctrl_class;
+	}
+
+	@Override
+	public IObjectCtrl getController() {
+		__init();
+		return this._ctrl;
 	}
 
 }

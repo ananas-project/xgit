@@ -3,7 +3,6 @@ package test.objectbox;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Map;
 
 import org.junit.Test;
 
@@ -11,17 +10,15 @@ import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.objectbox.DefaultBox;
 import ananas.objectbox.IBox;
-import ananas.objectbox.IObjectBody;
-import ananas.objectbox.IObjectHead;
-import ananas.objectbox.IObjectLS;
-import ananas.objectbox.body.json.JsonBody;
-import ananas.objectbox.body.json.JsonBodyLS;
+import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectCtrl;
+import ananas.objectbox.ctrl.json.AbsJsonCtrl;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.ObjectId;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class TObjectBox extends JsonBody {
+public class TObjectBox extends AbsJsonCtrl {
 
 	@Test
 	public void test() {
@@ -36,21 +33,17 @@ public class TObjectBox extends JsonBody {
 		IBox box = new DefaultBox(file);
 
 		Class<?> cls = this.getClass();
-		IObjectLS ls = new JsonBodyLS();
-		box.getObjectIOManager().register(cls, ls);
 
-		IObjectBody body = box.newObject(cls, null);
-		IObjectHead head = body.getHead();
+		IObjectCtrl ctrl = box.newObject(cls, null);
+		IObject head = ctrl.getObject();
 		System.out.println("body = " + head.getBodyFile());
 
 		ObjectId id = head.getId();
-		body = box.getObject(id);
+		ctrl = box.getObject(id);
 
-		Map<String, String> fields = head.getFields();
+		String[] fields = head.listHeaders();
 		System.out.println("head=" + fields);
-		System.out.println("body=" + body);
-		head.save();
-		head.load();
+		System.out.println("ctrl=" + ctrl);
 
 	}
 
@@ -96,12 +89,6 @@ public class TObjectBox extends JsonBody {
 	public JSONObject onSave(JSONObject root) {
 		// TODO Auto-generated method stub
 		return root;
-	}
-
-	@Override
-	public void onCreate() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
