@@ -5,7 +5,7 @@ import java.util.Map;
 import ananas.lib.io.vfs.VFile;
 import ananas.xgit.repo.ObjectId;
 
-public interface IObject {
+public interface IObjectHead {
 
 	interface HeadKey {
 
@@ -18,13 +18,13 @@ public interface IObject {
 
 	ObjectId getId();
 
-	Map<String, String> getHead();
+	Map<String, String> getFields();
 
-	Class<?> getClassOB();
+	Class<?> getBodyClass();
 
 	long getCreateTime();
 
-	Object getBody();
+	IObjectBody getBody();
 
 	void load();
 

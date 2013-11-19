@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileInputStream;
 import ananas.lib.io.vfs.VFileOutputStream;
-import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectHead;
 import ananas.objectbox.IObjectLS;
 
 import com.alibaba.fastjson.JSON;
@@ -21,7 +21,7 @@ public class JsonBodyLS implements IObjectLS {
 	}
 
 	@Override
-	public void save(IObject obj) {
+	public void save(IObjectHead obj) {
 		try {
 			JsonBody body = (JsonBody) obj.getBody();
 			JSONObject json = new JSONObject();
@@ -37,7 +37,7 @@ public class JsonBodyLS implements IObjectLS {
 	}
 
 	@Override
-	public void load(IObject obj) {
+	public void load(IObjectHead obj) {
 
 		try {
 			VFile file = obj.getBodyFile();

@@ -8,14 +8,15 @@ import java.util.Properties;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.objectbox.IBox;
-import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectBody;
+import ananas.objectbox.IObjectHead;
 import ananas.objectbox.IObjectIOManager;
 import ananas.objectbox.IObjectLoader;
 import ananas.objectbox.IObjectSaver;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
 
-public class DefaultObj implements IObject {
+public class DefaultObj implements IObjectHead {
 
 	private final ObjectId _id;
 	private final IBox _box;
@@ -25,8 +26,8 @@ public class DefaultObj implements IObject {
 	private VFile _body_file;
 	private IObjectSaver _saver;
 	private IObjectLoader _loader;
-	private Object _body_obj;
-	private Class<?> _ob_class;
+	private IObjectBody _body_object;
+	private Class<?> _body_class;
 	private long _create_time;
 	private Map<String, String> _head;
 	private boolean _is_mod;
@@ -73,8 +74,10 @@ public class DefaultObj implements IObject {
 			// class & object
 			String clsName = map.get(HeadKey.ob_class);
 			Class<?> cls = Class.forName(clsName);
-			this._ob_class = cls;
-			this._body_obj = cls.newInstance();
+			this._body_class = cls;
+			IObjectBody body_obj = (IObjectBody) cls.newInstance();
+			body_obj.bindHead(this);
+			this._body_object = body_obj;
 
 			// io
 			IObjectIOManager iom = this._box.getObjectIOManager();
@@ -84,14 +87,14 @@ public class DefaultObj implements IObject {
 			this._saver = saver;
 
 			// file
-			VFile head, body;
-			head = go.getZipFile();
-			VFileSystem vfs = head.getVFS();
+			VFile headfile, bodyfile;
+			headfile = go.getZipFile();
+			VFileSystem vfs = headfile.getVFS();
 			String extName = saver.getExtName();
-			String bodyName = head.getName() + "." + extName;
-			body = vfs.newFile(head.getParentFile(), bodyName);
-			this._head_file = head;
-			this._body_file = body;
+			String bodyName = headfile.getName() + "." + extName;
+			bodyfile = vfs.newFile(headfile.getParentFile(), bodyName);
+			this._head_file = headfile;
+			this._body_file = bodyfile;
 
 			this.load();
 
@@ -102,15 +105,9 @@ public class DefaultObj implements IObject {
 	}
 
 	@Override
-	public Map<String, String> getHead() {
+	public Map<String, String> getFields() {
 		__init();
 		return new HashMap<String, String>(this._head);
-	}
-
-	@Override
-	public Class<?> getClassOB() {
-		__init();
-		return this._ob_class;
 	}
 
 	@Override
@@ -120,22 +117,22 @@ public class DefaultObj implements IObject {
 	}
 
 	@Override
-	public Object getBody() {
+	public IObjectBody getBody() {
 		__init();
-		return this._body_obj;
+		return this._body_object;
 	}
 
 	@Override
 	public void load() {
 		__init();
-		IObject obj = this;
+		IObjectHead obj = this;
 		this.getLoader().load(obj);
 	}
 
 	@Override
 	public void save() {
 		__init();
-		IObject obj = this;
+		IObjectHead obj = this;
 		this.getSaver().save(obj);
 	}
 
@@ -171,6 +168,12 @@ public class DefaultObj implements IObject {
 	@Override
 	public boolean isModified() {
 		return this._is_mod;
+	}
+
+	@Override
+	public Class<?> getBodyClass() {
+		__init();
+		return this._body_class;
 	}
 
 }

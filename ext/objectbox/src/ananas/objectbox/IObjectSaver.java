@@ -4,6 +4,6 @@ public interface IObjectSaver {
 
 	String getExtName();
 
-	void save(IObject obj);
+	void save(IObjectHead obj);
 
 }

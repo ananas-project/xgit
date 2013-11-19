@@ -1,10 +1,25 @@
 package ananas.objectbox.body.json;
 
-import com.alibaba.fastjson.JSONObject;
+import ananas.objectbox.IObjectBody;
+import ananas.objectbox.IObjectHead;
 
-public interface JsonBody {
+public abstract class JsonBody implements IObjectBody, IJsonBody {
 
-	void onLoad(JSONObject root);
+	private IObjectHead _head;
 
-	JSONObject onSave(JSONObject root);
+	@Override
+	public final boolean bindHead(IObjectHead head) {
+		if (this._head == null && head != null) {
+			this._head = head;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public final IObjectHead getHead() {
+		return this._head;
+	}
+
 }

@@ -1,6 +1,6 @@
 package ananas.objectbox.impl;
 
-import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectHead;
 import ananas.objectbox.IObjectSaver;
 
 public class DefaultSaver implements IObjectSaver {
@@ -11,7 +11,7 @@ public class DefaultSaver implements IObjectSaver {
 	}
 
 	@Override
-	public void save(IObject obj) {
+	public void save(IObjectHead obj) {
 		// TODO Auto-generated method stub
 
 	}

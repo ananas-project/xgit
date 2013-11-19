@@ -13,8 +13,9 @@ import ananas.impl.xgit.local.LocalObjectBankImpl;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileOutputStream;
 import ananas.objectbox.IBox;
-import ananas.objectbox.IObject;
-import ananas.objectbox.IObject.HeadKey;
+import ananas.objectbox.IObjectBody;
+import ananas.objectbox.IObjectHead;
+import ananas.objectbox.IObjectHead.HeadKey;
 import ananas.objectbox.IObjectIOManager;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
@@ -34,17 +35,17 @@ public class DefaultBoxImpl implements IBox {
 	}
 
 	@Override
-	public IObject getObject(ObjectId id) {
+	public IObjectBody getObject(ObjectId id) {
 		ObjCache cache = this.__get_cache();
-		IObject obj = cache.get(id);
+		IObjectHead obj = cache.get(id);
 		if (obj == null) {
 			obj = this.__load_obj(id);
 			cache.put(obj);
 		}
-		return obj;
+		return obj.getBody();
 	}
 
-	private IObject __load_obj(ObjectId id) {
+	private IObjectHead __load_obj(ObjectId id) {
 		LocalObject go = this._obj_bank.getObject(id);
 		if (go.exists()) {
 			return new DefaultObj(this, go);
@@ -53,7 +54,7 @@ public class DefaultBoxImpl implements IBox {
 		}
 	}
 
-	private IObject __new_obj(Class<?> cls, Map<String, String> head) {
+	private IObjectHead __new_obj(Class<?> cls, Map<String, String> head) {
 
 		if (head == null) {
 			head = new HashMap<String, String>();
@@ -117,15 +118,15 @@ public class DefaultBoxImpl implements IBox {
 	private static class ObjCache {
 
 		private ObjCache _parent;
-		private final Map<ObjectId, IObject> _map;
+		private final Map<ObjectId, IObjectHead> _map;
 		private int _count;
 
 		public ObjCache(ObjCache parent) {
 			this._parent = parent;
-			this._map = new Hashtable<ObjectId, IObject>();
+			this._map = new Hashtable<ObjectId, IObjectHead>();
 		}
 
-		public void put(IObject obj) {
+		public void put(IObjectHead obj) {
 			if (obj == null)
 				return;
 			ObjectId id = obj.getId();
@@ -133,8 +134,8 @@ public class DefaultBoxImpl implements IBox {
 			this._count = this._map.size();
 		}
 
-		public IObject get(ObjectId id) {
-			IObject obj = this._map.get(id);
+		public IObjectHead get(ObjectId id) {
+			IObjectHead obj = this._map.get(id);
 			if (obj == null) {
 				ObjCache p = this._parent;
 				if (p != null) {
@@ -164,11 +165,11 @@ public class DefaultBoxImpl implements IBox {
 	}
 
 	@Override
-	public IObject newObject(Class<?> cls, Map<String, String> head) {
-		IObject obj = this.__new_obj(cls, head);
+	public IObjectBody newObject(Class<?> cls, Map<String, String> head) {
+		IObjectHead obj = this.__new_obj(cls, head);
 		ObjCache cache = this.__get_cache();
 		cache.put(obj);
-		return obj;
+		return obj.getBody();
 	}
 
 	@Override

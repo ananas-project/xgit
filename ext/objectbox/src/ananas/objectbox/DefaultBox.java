@@ -15,12 +15,12 @@ public class DefaultBox implements IBox {
 	}
 
 	@Override
-	public IObject getObject(ObjectId id) {
+	public IObjectBody getObject(ObjectId id) {
 		return impl.getObject(id);
 	}
 
 	@Override
-	public IObject newObject(Class<?> cls, Map<String, String> head) {
+	public IObjectBody newObject(Class<?> cls, Map<String, String> head) {
 		return impl.newObject(cls, head);
 	}
 

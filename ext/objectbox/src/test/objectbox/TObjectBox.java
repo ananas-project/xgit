@@ -7,20 +7,21 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSONObject;
-
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.objectbox.DefaultBox;
 import ananas.objectbox.IBox;
-import ananas.objectbox.IObject;
+import ananas.objectbox.IObjectBody;
+import ananas.objectbox.IObjectHead;
 import ananas.objectbox.IObjectLS;
 import ananas.objectbox.body.json.JsonBody;
 import ananas.objectbox.body.json.JsonBodyLS;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.ObjectId;
 
-public class TObjectBox implements JsonBody {
+import com.alibaba.fastjson.JSONObject;
+
+public class TObjectBox extends JsonBody {
 
 	@Test
 	public void test() {
@@ -38,17 +39,18 @@ public class TObjectBox implements JsonBody {
 		IObjectLS ls = new JsonBodyLS();
 		box.getObjectIOManager().register(cls, ls);
 
-		IObject obj = box.newObject(cls, null);
-		System.out.println("body = " + obj.getBodyFile());
+		IObjectBody body = box.newObject(cls, null);
+		IObjectHead head = body.getHead();
+		System.out.println("body = " + head.getBodyFile());
 
-		ObjectId id = obj.getId();
-		obj = box.getObject(id);
-		Object body = obj.getBody();
-		Map<String, String> head = obj.getHead();
-		System.out.println("head=" + head);
+		ObjectId id = head.getId();
+		body = box.getObject(id);
+
+		Map<String, String> fields = head.getFields();
+		System.out.println("head=" + fields);
 		System.out.println("body=" + body);
-		obj.save();
-		obj.load();
+		head.save();
+		head.load();
 
 	}
 
@@ -94,6 +96,12 @@ public class TObjectBox implements JsonBody {
 	public JSONObject onSave(JSONObject root) {
 		// TODO Auto-generated method stub
 		return root;
+	}
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

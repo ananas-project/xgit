@@ -7,9 +7,9 @@ import ananas.xgit.repo.ObjectId;
 
 public interface IBox {
 
-	IObject getObject(ObjectId id);
+	IObjectBody getObject(ObjectId id);
 
-	IObject newObject(Class<?> cls, Map<String, String> head);
+	IObjectBody newObject(Class<?> cls, Map<String, String> head);
 
 	IObjectIOManager getObjectIOManager();
 
