@@ -15,17 +15,17 @@ public class DefaultBox implements IBox {
 	}
 
 	@Override
-	public IObjectCtrl getObject(ObjectId id) {
+	public VFile getBaseDirectory() {
+		return impl.getBaseDirectory();
+	}
+
+	@Override
+	public IObject getObject(ObjectId id) {
 		return impl.getObject(id);
 	}
 
 	@Override
-	public IObjectCtrl newObject(Class<?> cls, Map<String, String> head) {
-		return impl.newObject(cls, head);
-	}
-
-	@Override
-	public VFile getBaseDirectory() {
-		return impl.getBaseDirectory();
+	public IObject newObject(String type, Map<String, String> headers) {
+		return impl.newObject(type, headers);
 	}
 }

@@ -8,7 +8,7 @@ public interface IObject {
 	interface HeadKey {
 
 		String create_time = "Create-Time";
-		String ob_class = "Class";
+		String ob_class = "Type";
 
 	}
 
@@ -18,11 +18,9 @@ public interface IObject {
 
 	String getHeader(String key);
 
-	String[] listHeaders();
+	String[] getHeaderNames();
 
-	Class<?> getControllerClass();
-
-	IObjectCtrl getController();
+	String getType();
 
 	VFile getHeadFile();
 

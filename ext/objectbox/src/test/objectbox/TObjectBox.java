@@ -11,14 +11,10 @@ import ananas.lib.io.vfs.VFile;
 import ananas.objectbox.DefaultBox;
 import ananas.objectbox.IBox;
 import ananas.objectbox.IObject;
-import ananas.objectbox.IObjectCtrl;
-import ananas.objectbox.ctrl.json.AbsJsonCtrl;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.ObjectId;
 
-import com.alibaba.fastjson.JSONObject;
-
-public class TObjectBox extends AbsJsonCtrl {
+public class TObjectBox {
 
 	@Test
 	public void test() {
@@ -34,16 +30,20 @@ public class TObjectBox extends AbsJsonCtrl {
 
 		Class<?> cls = this.getClass();
 
-		IObjectCtrl ctrl = box.newObject(cls, null);
-		IObject head = ctrl.getObject();
-		System.out.println("body = " + head.getBodyFile());
+		IObject obj = box.newObject(cls.getName(), null);
+		System.out.println("head-file = " + obj.getHeadFile());
+		System.out.println("body-file = " + obj.getBodyFile());
 
-		ObjectId id = head.getId();
-		ctrl = box.getObject(id);
+		ObjectId id = obj.getId();
+		obj = box.getObject(id);
 
-		String[] fields = head.listHeaders();
-		System.out.println("head=" + fields);
-		System.out.println("ctrl=" + ctrl);
+		String[] names = obj.getHeaderNames();
+		System.out.println("headerNames :");
+		for (String name : names) {
+			String value = obj.getHeader(name);
+			System.out.println("    " + name + " = " + value);
+		}
+		System.out.println("obj-type = " + obj.getType());
 
 	}
 
@@ -77,18 +77,6 @@ public class TObjectBox extends AbsJsonCtrl {
 	public static void main(String[] arg) {
 
 		(new TObjectBox()).test();
-	}
-
-	@Override
-	public void onLoad(JSONObject root) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public JSONObject onSave(JSONObject root) {
-		// TODO Auto-generated method stub
-		return root;
 	}
 
 }

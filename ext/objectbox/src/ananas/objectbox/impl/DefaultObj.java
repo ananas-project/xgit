@@ -11,7 +11,6 @@ import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.objectbox.IBox;
 import ananas.objectbox.IObject;
-import ananas.objectbox.IObjectCtrl;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
 
@@ -23,10 +22,9 @@ public class DefaultObj implements IObject {
 	private final VFile _head_file;
 	private final VFile _body_file;
 
-	private IObjectCtrl _ctrl;
-	private Class<?> _ctrl_class;
-	private Map<String, String> _head;
-	private List<String> _headers;
+	private String _obj_class;
+	private Map<String, String> _header_map;
+	private List<String> _header_names;
 
 	public DefaultObj(IBox box, LocalObject go) {
 		this._box = box;
@@ -52,7 +50,7 @@ public class DefaultObj implements IObject {
 
 	private void __init() {
 
-		if (this._head_file != null)
+		if (this._obj_class != null)
 			return;
 
 		try {
@@ -68,19 +66,11 @@ public class DefaultObj implements IObject {
 				String val = prop.getProperty(key);
 				map.put(key, val);
 			}
-			this._head = map;
-			this._headers = new ArrayList<String>(map.keySet());
+			this._header_map = map;
+			this._header_names = new ArrayList<String>(map.keySet());
 
 			// class & object
-			String clsName = map.get(HeadKey.ob_class);
-			Class<?> cls = Class.forName(clsName);
-			this._ctrl_class = cls;
-			IObjectCtrl ctrl = (IObjectCtrl) cls.newInstance();
-			// body_obj.bindHead(this);
-			this._ctrl = ctrl;
-
-			// load header
-			ctrl.onLoad(this);
+			this._obj_class = map.get(HeadKey.ob_class);
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -103,26 +93,20 @@ public class DefaultObj implements IObject {
 	@Override
 	public String getHeader(String key) {
 		__init();
-		return this._head.get(key);
+		return this._header_map.get(key);
 	}
 
 	@Override
-	public String[] listHeaders() {
+	public String[] getHeaderNames() {
 		__init();
-		List<String> list = this._headers;
+		List<String> list = this._header_names;
 		return list.toArray(new String[list.size()]);
 	}
 
 	@Override
-	public Class<?> getControllerClass() {
+	public String getType() {
 		__init();
-		return this._ctrl_class;
-	}
-
-	@Override
-	public IObjectCtrl getController() {
-		__init();
-		return this._ctrl;
+		return this._obj_class;
 	}
 
 }

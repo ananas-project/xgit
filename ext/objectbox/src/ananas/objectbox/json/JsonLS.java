@@ -1,4 +1,4 @@
-package ananas.objectbox.ctrl.json;
+package ananas.objectbox.json;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,20 +12,13 @@ import ananas.objectbox.IObject;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-public abstract class AbsJsonCtrl implements IJsonController {
+public final class JsonLS {
 
-	@Override
-	public void onCreate(IObject obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onLoad(IObject obj) {
+	public static JSONObject load(IObject obj) {
 		try {
 			VFile file = obj.getBodyFile();
 			if (!file.exists()) {
-				return;
+				return null;
 			}
 			StringBuilder sb = new StringBuilder();
 			InputStream in = new VFileInputStream(file);
@@ -40,18 +33,15 @@ public abstract class AbsJsonCtrl implements IJsonController {
 			rdr.close();
 			in.close();
 			JSONObject json = JSON.parseObject(sb.toString());
-			this.onLoad(json);
+			return json;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-
 	}
 
-	@Override
-	public void onSave(IObject obj) {
+	public static void save(IObject obj, JSONObject json) {
 		try {
-			JSONObject json = new JSONObject();
-			json = this.onSave(json);
 			VFile file = obj.getBodyFile();
 			byte[] ba = JSON.toJSONBytes(json);
 			OutputStream out = new VFileOutputStream(file);
@@ -60,12 +50,6 @@ public abstract class AbsJsonCtrl implements IJsonController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public IObject getObject() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -15,7 +15,6 @@ import ananas.lib.io.vfs.VFileOutputStream;
 import ananas.objectbox.IBox;
 import ananas.objectbox.IObject;
 import ananas.objectbox.IObject.HeadKey;
-import ananas.objectbox.IObjectCtrl;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
 import ananas.xgit.repo.local.LocalObjectBank;
@@ -34,14 +33,14 @@ public class DefaultBoxImpl implements IBox {
 	}
 
 	@Override
-	public IObjectCtrl getObject(ObjectId id) {
+	public IObject getObject(ObjectId id) {
 		ObjCache cache = this.__get_cache();
 		IObject obj = cache.get(id);
 		if (obj == null) {
 			obj = this.__load_obj(id);
 			cache.put(obj);
 		}
-		return obj.getController();
+		return obj;
 	}
 
 	private IObject __load_obj(ObjectId id) {
@@ -53,13 +52,13 @@ public class DefaultBoxImpl implements IBox {
 		}
 	}
 
-	private IObject __new_obj(Class<?> cls, Map<String, String> head) {
+	private IObject __new_obj(String type0, Map<String, String> head) {
 
 		if (head == null) {
 			head = new HashMap<String, String>();
 		}
 		// head.put(HeadKey.create_time, "" + System.currentTimeMillis());
-		head.put(HeadKey.ob_class, cls.getName());
+		head.put(HeadKey.ob_class, "" + type0);
 
 		try {
 			byte[] ba = this.__gen_head_data(head);
@@ -164,11 +163,11 @@ public class DefaultBoxImpl implements IBox {
 	}
 
 	@Override
-	public IObjectCtrl newObject(Class<?> cls, Map<String, String> head) {
-		IObject obj = this.__new_obj(cls, head);
+	public IObject newObject(String type, Map<String, String> head) {
+		IObject obj = this.__new_obj(type, head);
 		ObjCache cache = this.__get_cache();
 		cache.put(obj);
-		return obj.getController();
+		return obj;
 	}
 
 	@Override

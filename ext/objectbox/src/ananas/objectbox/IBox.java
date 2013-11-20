@@ -7,9 +7,9 @@ import ananas.xgit.repo.ObjectId;
 
 public interface IBox {
 
-	IObjectCtrl getObject(ObjectId id);
+	IObject getObject(ObjectId id);
 
-	IObjectCtrl newObject(Class<?> ctrlClass, Map<String, String> head);
+	IObject newObject(String type, Map<String, String> headers);
 
 	VFile getBaseDirectory();
 }
