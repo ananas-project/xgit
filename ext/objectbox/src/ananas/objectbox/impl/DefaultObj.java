@@ -1,5 +1,6 @@
 package ananas.objectbox.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,12 +22,14 @@ public class DefaultObj implements IObject {
 	private final LocalObject _go;
 	private final VFile _head_file;
 	private final VFile _body_file;
+	private final VFile _body_dir;
 
-	private String _obj_class;
+	private String _obj_type;
 	private Map<String, String> _header_map;
 	private List<String> _header_names;
 
 	public DefaultObj(IBox box, LocalObject go) {
+
 		this._box = box;
 		this._id = go.id();
 		this._go = go;
@@ -34,8 +37,9 @@ public class DefaultObj implements IObject {
 		VFile hfile = go.getZipFile();
 		VFileSystem vfs = hfile.getVFS();
 		this._head_file = hfile;
-		this._body_file = vfs.newFile(hfile.getParentFile(), hfile.getName()
-				+ ".body");
+		VFile dir = vfs.newFile(hfile.getParentFile(), "." + hfile.getName());
+		this._body_dir = dir;
+		this._body_file = vfs.newFile(dir, "body");
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class DefaultObj implements IObject {
 
 	private void __init() {
 
-		if (this._obj_class != null)
+		if (this._header_map != null)
 			return;
 
 		try {
@@ -66,11 +70,11 @@ public class DefaultObj implements IObject {
 				String val = prop.getProperty(key);
 				map.put(key, val);
 			}
-			this._header_map = map;
 			this._header_names = new ArrayList<String>(map.keySet());
 
 			// class & object
-			this._obj_class = map.get(HeadKey.ob_class);
+			this._obj_type = map.get(HeadKey.ob_class);
+			this._header_map = map;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -80,13 +84,11 @@ public class DefaultObj implements IObject {
 
 	@Override
 	public VFile getHeadFile() {
-		__init();
 		return this._head_file;
 	}
 
 	@Override
 	public VFile getBodyFile() {
-		__init();
 		return this._body_file;
 	}
 
@@ -106,7 +108,64 @@ public class DefaultObj implements IObject {
 	@Override
 	public String getType() {
 		__init();
-		return this._obj_class;
+		return this._obj_type;
+	}
+
+	@Override
+	public Class<?> getTypeClass() {
+		__init();
+		String type = this._obj_type;
+		return this.getOwnerBox().getTypeRegistrar().getClass(type);
+	}
+
+	@Override
+	public VFile getBodyDirectory() {
+		return this._body_dir;
+	}
+
+	@Override
+	public ObjectId[] listLinks() {
+
+		List<ObjectId> list = new ArrayList<ObjectId>();
+		VFile dir = this._body_dir;
+		if (dir.exists()) {
+			String suffix = ".link";
+			String[] names = dir.list();
+			for (String name : names) {
+				if (name.endsWith(suffix)) {
+					String n2 = name.substring(0,
+							name.length() - suffix.length());
+					if (n2.length() == 40) {
+						ObjectId id = ObjectId.Factory.create(n2);
+						list.add(id);
+					}
+				}
+			}
+		}
+		return list.toArray(new ObjectId[list.size()]);
+	}
+
+	@Override
+	public void removeLink(ObjectId link) {
+		VFileSystem vfs = _body_dir.getVFS();
+		VFile file = vfs.newFile(_body_dir, link + ".link");
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+
+	@Override
+	public void addLink(ObjectId link) {
+		VFileSystem vfs = _body_dir.getVFS();
+		VFile file = vfs.newFile(_body_dir, link + ".link");
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

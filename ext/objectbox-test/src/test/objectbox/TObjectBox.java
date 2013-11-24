@@ -3,14 +3,17 @@ package test.objectbox;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Properties;
 
 import org.junit.Test;
 
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
+import ananas.lib.util.PropertiesLoader;
 import ananas.objectbox.DefaultBox;
 import ananas.objectbox.IBox;
 import ananas.objectbox.IObject;
+import ananas.objectbox.ITypeRegistrar;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.ObjectId;
 
@@ -28,9 +31,11 @@ public class TObjectBox {
 		System.out.println("test/repo at " + file);
 		IBox box = new DefaultBox(file);
 
+		this._regTypes(box);
+
 		Class<?> cls = this.getClass();
 
-		IObject obj = box.newObject(cls.getName(), null);
+		IObject obj = box.newObject(cls, null);
 		System.out.println("head-file = " + obj.getHeadFile());
 		System.out.println("body-file = " + obj.getBodyFile());
 
@@ -45,6 +50,13 @@ public class TObjectBox {
 		}
 		System.out.println("obj-type = " + obj.getType());
 
+	}
+
+	private void _regTypes(IBox box) {
+		Properties prop = PropertiesLoader.Util.loaderFor(this,
+				"type-reg.properties").load();
+		ITypeRegistrar reg = box.getTypeRegistrar();
+		ITypeRegistrar.Util.loadTypes(reg, prop);
 	}
 
 	private void __init() {

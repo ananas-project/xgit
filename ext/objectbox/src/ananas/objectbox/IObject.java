@@ -8,7 +8,7 @@ public interface IObject {
 	interface HeadKey {
 
 		String create_time = "Create-Time";
-		String ob_class = "Type";
+		String ob_class = "Content-Type";
 
 	}
 
@@ -22,8 +22,18 @@ public interface IObject {
 
 	String getType();
 
+	Class<?> getTypeClass();
+
 	VFile getHeadFile();
 
+	VFile getBodyDirectory();
+
 	VFile getBodyFile();
+
+	ObjectId[] listLinks();
+
+	void removeLink(ObjectId link);
+
+	void addLink(ObjectId link);
 
 }

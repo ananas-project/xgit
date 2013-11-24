@@ -14,18 +14,20 @@ public class DefaultBox implements IBox {
 		impl = new DefaultBoxImpl(baseDir);
 	}
 
-	@Override
-	public VFile getBaseDirectory() {
-		return impl.getBaseDirectory();
+	public ITypeRegistrar getTypeRegistrar() {
+		return impl.getTypeRegistrar();
 	}
 
-	@Override
 	public IObject getObject(ObjectId id) {
 		return impl.getObject(id);
 	}
 
-	@Override
-	public IObject newObject(String type, Map<String, String> headers) {
-		return impl.newObject(type, headers);
+	public IObject newObject(Class<?> cls, Map<String, String> headers) {
+		return impl.newObject(cls, headers);
 	}
+
+	public VFile getBaseDirectory() {
+		return impl.getBaseDirectory();
+	}
+
 }
