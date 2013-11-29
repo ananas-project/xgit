@@ -45,16 +45,20 @@ public class DefaultTypeReg implements ITypeRegistrar {
 	@Override
 	public Class<?> getClass(String type) {
 		MyType t = this._type_map.get(type);
-		if (t == null)
+		if (t == null) {
+			System.err.println("warning:no type for name : " + type);
 			return null;
+		}
 		return t._class;
 	}
 
 	@Override
 	public String getType(Class<?> cls) {
 		MyType t = this._type_map.get(cls.getName());
-		if (t == null)
+		if (t == null) {
+			System.err.println("warning:no type for name : " + cls);
 			return null;
+		}
 		return t._type;
 	}
 

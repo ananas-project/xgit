@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/xgit-core-api"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/xgit-core-lib"/>
+	<classpathentry kind="lib" path="/ananas-base-jar/jar-lib/fastjson-1.1.31.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
