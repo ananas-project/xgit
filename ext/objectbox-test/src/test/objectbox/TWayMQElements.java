@@ -15,6 +15,7 @@ import ananas.objectbox.IBox;
 import ananas.objectbox.ITypeRegistrar;
 import ananas.objectbox.session.DefaultSession;
 import ananas.objectbox.session.ISession;
+import ananas.waymq.element.Group;
 import ananas.waymq.element.Phone;
 import ananas.waymq.element.User;
 import ananas.xgit.boot.DefaultXGitBootstrap;
@@ -32,13 +33,19 @@ public class TWayMQElements {
 		ObjectId id = phone.getTarget().getId();
 		System.out.println(phone.getClass() + "::" + id + "::" + num);
 
-		User user = phone.getUser();
-		if (user == null) {
-			user = User.newInstance(session, phone);
+		User user = phone.getUser(true);
+		String name = user.getName();
+		if (name == null) {
 			user.setName("Mike");
 		}
 		id = user.getTarget().getId();
 		System.out.println(user.getClass() + "::" + id + "::" + user.getName());
+
+		Group[] glist = user.listHoldingGroups();
+		if (glist.length < 1) {
+			Group group = Group.newInstance(user);
+			System.out.println("new " + group);
+		}
 
 		session.save();
 	}

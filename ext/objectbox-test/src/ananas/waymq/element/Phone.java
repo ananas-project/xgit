@@ -53,10 +53,24 @@ public class Phone extends JsonElementBase {
 	}
 
 	public User getUser() {
+		return this.__get_user(false);
+	}
+
+	public User getUser(boolean create) {
+		return this.__get_user(create);
+	}
+
+	private User __get_user(boolean create) {
 		IElement ele = this.getElement(this._user_id);
-		if (ele == null)
+		if (ele != null) {
+			return (User) ele.getWrapper();
+		}
+		if (!create) {
 			return null;
-		return (User) ele.getWrapper();
+		}
+		User user = User.newInstance(this);
+		this._user_id = user.getTarget().getId();
+		return user;
 	}
 
 	public String getNumber() {
