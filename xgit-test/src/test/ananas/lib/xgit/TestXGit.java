@@ -5,11 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ananas.impl.xgit.util.StreamPump;
 import ananas.lib.io.vfs.VFS;
 import ananas.lib.io.vfs.VFile;
 import ananas.lib.io.vfs.VFileSystem;
 import ananas.lib.util.PropertiesLoader;
-import ananas.lib.xgit.util.StreamPump;
 import ananas.xgit.XGitException;
 import ananas.xgit.boot.DefaultXGitBootstrap;
 import ananas.xgit.repo.local.DefaultLocalRepoFactory;
@@ -77,10 +77,15 @@ public class TestXGit implements Runnable {
 
 			}
 
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			System.out.println("do add");
+
 			WorkingDirectory wd = repo.getWorkingDirectory();
 			Indexer indexer = repo.getIndexer();
 			IndexNode node = indexer.getNode(wd.getDirectory());
-			node.add(true);
+			indexer.add(node, true);
+
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 		} catch (IOException e) {
 			e.printStackTrace();

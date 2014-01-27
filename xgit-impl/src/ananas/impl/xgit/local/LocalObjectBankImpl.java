@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
+import ananas.impl.xgit.util.StreamPump;
 import ananas.lib.io.vfs.VFile;
-import ananas.lib.xgit.util.StreamPump;
 import ananas.xgit.repo.ObjectId;
 import ananas.xgit.repo.local.LocalObject;
 import ananas.xgit.repo.local.LocalObjectBank;

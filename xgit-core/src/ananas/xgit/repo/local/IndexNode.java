@@ -11,8 +11,18 @@ public interface IndexNode {
 
 	VFile getTargetFile();
 
+	// operate
+
+	void add() throws IOException;
+
+	// meta
+
 	ObjectId getObjectId();
 
-	void add(boolean r) throws IOException;
+	String getType();
+
+	long getLength();
+
+	long lastModified();
 
 }

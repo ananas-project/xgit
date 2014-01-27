@@ -1,4 +1,4 @@
-package ananas.lib.xgit.util;
+package ananas.impl.xgit.util;
 
 import java.io.IOException;
 import java.io.InputStream;
