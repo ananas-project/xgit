@@ -1,4 +1,4 @@
-package ananas.xgitlite.impl;
+package ananas.xgitlite.util;
 
 import java.io.File;
 import java.io.FileOutputStream;

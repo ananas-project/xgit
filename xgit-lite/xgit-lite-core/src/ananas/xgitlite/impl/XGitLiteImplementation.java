@@ -21,7 +21,7 @@ public class XGitLiteImplementation extends XGitLite {
 
 	@Override
 	public String getDefaultRepoDirectoryName() {
-		return ".xgit";
+		return ".git";
 	}
 
 	@Override
