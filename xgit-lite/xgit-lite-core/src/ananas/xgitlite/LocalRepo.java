@@ -7,7 +7,7 @@ public interface LocalRepo extends Repo {
 
 	interface Name {
 
-		String xgit_conf = "xgit.config";
+		String xgit_conf = "xgit/config";
 		String xgit_dir = "xgit";
 
 		String branches = "branches";
@@ -29,4 +29,5 @@ public interface LocalRepo extends Repo {
 
 	void init(boolean bare) throws XGLException, IOException;
 
+	void check() throws XGLException, IOException;
 }

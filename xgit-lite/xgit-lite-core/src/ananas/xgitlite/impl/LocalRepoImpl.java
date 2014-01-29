@@ -19,7 +19,7 @@ public class LocalRepoImpl implements LocalRepo {
 	public LocalRepoImpl(File path) {
 		this._repo_dir = path;
 		this._work_dir = path.getParentFile();
-		this._config = new LocalRepoConfigImpl();
+		this._config = null; // new LocalRepoConfigImpl();
 	}
 
 	@Override
@@ -61,19 +61,40 @@ public class LocalRepoImpl implements LocalRepo {
 		}
 
 		File file = new File(_repo_dir, Name.xgit_conf);
-		LocalRepoConfig conf = this.getConfig();
+		LocalRepoConfig conf = new LocalRepoConfigImpl();
 		Core cc = conf.getCore();
 		cc.set(LocalRepoConfig.Core.bare, Boolean.toString(bare));
 		cc.set(LocalRepoConfig.Core.xgit, Boolean.toString(true));
 		cc.set(LocalRepoConfig.Core.filemode, Boolean.toString(true));
 		cc.set(LocalRepoConfig.Core.repositoryformatversion, "0");
 		conf.save(file);
+		this._config = conf;
 
 	}
 
 	@Override
 	public LocalRepoConfig getConfig() {
 		return this._config;
+	}
+
+	@Override
+	public void check() throws XGLException, IOException {
+
+		String[] list = { Name.branches, Name.objects, Name.refs, Name.xgit_dir };
+		for (String s : list) {
+			File dir = new File(_repo_dir, s);
+			if (dir.exists() && dir.isDirectory()) {
+				// ok, do nothing
+			} else {
+				throw new XGLException("the required directory not existed : "
+						+ dir);
+			}
+		}
+
+		LocalRepoConfig conf = new LocalRepoConfigImpl();
+		conf.load(new File(_repo_dir, Name.xgit_conf));
+		this._config = conf;
+
 	}
 
 }
