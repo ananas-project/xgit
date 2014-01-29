@@ -30,4 +30,8 @@ public interface LocalRepo extends Repo {
 	void init(boolean bare) throws XGLException, IOException;
 
 	void check() throws XGLException, IOException;
+
+	void add(File path);
+
+	void commit(File path);
 }

@@ -97,4 +97,16 @@ public class LocalRepoImpl implements LocalRepo {
 
 	}
 
+	@Override
+	public void add(File path) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void commit(File path) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

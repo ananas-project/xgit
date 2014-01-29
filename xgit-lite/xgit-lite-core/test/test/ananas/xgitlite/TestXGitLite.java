@@ -31,6 +31,10 @@ public class TestXGitLite {
 			if (rlt.length > 0)
 				repo = rlt[0];
 
+			File wkdir = repo.getWorkingDirectory() ;
+			repo. add  ( wkdir  ) ;
+			repo. commit   ( wkdir  ) ;
+			
 			System.out.println("init repo at " + repo_dir);
 
 		} catch (XGLException e) {
