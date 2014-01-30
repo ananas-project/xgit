@@ -146,10 +146,10 @@ class LocalObjectBankImpl implements LocalObjectBank {
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
-			BufferedFileOutputStream out = new BufferedFileOutputStream(
+			BufferedFileOutputStream bfos = new BufferedFileOutputStream(
 					this._tmp_file);
-			this._out = out;
-			this._out_bfos = out;
+			this._out = new java.util.zip.DeflaterOutputStream(bfos);
+			this._out_bfos = bfos;
 
 			// build head
 			StringBuilder sb = new StringBuilder();
@@ -211,7 +211,7 @@ class LocalObjectBankImpl implements LocalObjectBank {
 			this._out = _baos;
 		}
 
-		public void finish(final File mv2) throws IOException {
+		public void finish(final File mv2) throws IOException, XGLException {
 			_out.close();
 			final File tmp = _tmp_file;
 			if (mv2 == null) {
@@ -227,7 +227,10 @@ class LocalObjectBankImpl implements LocalObjectBank {
 					out.write(_baos.toByteArray());
 					out.close();
 				}
-				tmp.renameTo(mv2);
+				mv2.getParentFile().mkdirs();
+				if (!tmp.renameTo(mv2)) {
+					throw new XGLException("cannot move " + tmp + " to " + mv2);
+				}
 			}
 			this._out = null;
 			this._baos = null;

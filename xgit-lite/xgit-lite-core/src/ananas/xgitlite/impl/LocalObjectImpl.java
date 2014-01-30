@@ -7,16 +7,19 @@ import java.io.OutputStream;
 import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.local.LocalObject;
 
-  class LocalObjectImpl implements LocalObject {
+class LocalObjectImpl implements LocalObject {
+
+	private final ObjectId _id;
+	private final File _file;
 
 	public LocalObjectImpl(ObjectId id, File file) {
-		// TODO Auto-generated constructor stub
+		this._id = id;
+		this._file = file;
 	}
 
 	@Override
 	public ObjectId getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return _id;
 	}
 
 	@Override
@@ -51,8 +54,7 @@ import ananas.xgitlite.local.LocalObject;
 
 	@Override
 	public boolean exists() {
-		// TODO Auto-generated method stub
-		return false;
+		return _file.exists();
 	}
 
 }

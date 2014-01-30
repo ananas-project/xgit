@@ -1,7 +1,6 @@
 package ananas.xgitlite.impl;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 
 import ananas.xgitlite.XGLException;
@@ -9,6 +8,7 @@ import ananas.xgitlite.local.LocalObjectBank;
 import ananas.xgitlite.local.LocalRepo;
 import ananas.xgitlite.local.LocalRepoConfig;
 import ananas.xgitlite.local.LocalRepoConfig.Core;
+import ananas.xgitlite.util.IndexBuilder;
 import ananas.xgitlite.util.TreeWalker;
 
 class LocalRepoImpl implements LocalRepo {
@@ -96,16 +96,16 @@ class LocalRepoImpl implements LocalRepo {
 	@Override
 	public void add(File path) {
 
-		FileFilter filter = new FileFilter() {
+		LocalRepo repo = this;
+		IndexBuilder builder = new IndexBuilder(repo);
 
-			@Override
-			public boolean accept(File file) {
-				System.out.println(this + " : " + file);
-				return true;
-			}
-		};
+		builder.begin(path);
+
 		TreeWalker tw = new TreeWalker();
-		tw.go(path, filter);
+		tw.go(path, builder);
+
+		builder.end();
+
 	}
 
 	@Override
