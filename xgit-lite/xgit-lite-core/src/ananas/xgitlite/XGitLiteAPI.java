@@ -9,6 +9,8 @@ public interface XGitLiteAPI {
 
 	ObjectId createObjectId(String id);
 
+	ObjectId createObjectId(byte[] id);
+
 	LocalRepo createLocalRepo(File path);
 
 	LocalRepoFinder getRepoFinder(boolean up);

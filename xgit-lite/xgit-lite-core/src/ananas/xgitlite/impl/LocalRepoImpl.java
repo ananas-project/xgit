@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-import ananas.xgitlite.local.LocalObject;
+import ananas.xgitlite.XGLException;
+import ananas.xgitlite.local.LocalObjectBank;
 import ananas.xgitlite.local.LocalRepo;
 import ananas.xgitlite.local.LocalRepoConfig;
 import ananas.xgitlite.local.LocalRepoConfig.Core;
-import ananas.xgitlite.ObjectId;
-import ananas.xgitlite.XGLException;
 import ananas.xgitlite.util.TreeWalker;
 
-public class LocalRepoImpl implements LocalRepo {
+class LocalRepoImpl implements LocalRepo {
 
 	private final File _repo_dir;
 	private final File _work_dir;
 	private LocalRepoConfig _config;
+	private LocalObjectBank _obj_bank;
 
 	public LocalRepoImpl(File path) {
 		this._repo_dir = path;
@@ -27,12 +27,6 @@ public class LocalRepoImpl implements LocalRepo {
 	@Override
 	public File getRepoDirectory() {
 		return this._repo_dir;
-	}
-
-	@Override
-	public LocalObject getObject(ObjectId id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -118,6 +112,17 @@ public class LocalRepoImpl implements LocalRepo {
 	public void commit(File path) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public LocalObjectBank getObjectBank() {
+		LocalObjectBank bank = this._obj_bank;
+		if (bank == null) {
+			File dir = new File(_repo_dir, LocalRepo.Name.objects);
+			bank = new LocalObjectBankImpl(dir);
+			this._obj_bank = bank;
+		}
+		return bank;
 	}
 
 }

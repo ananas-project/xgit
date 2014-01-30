@@ -11,7 +11,7 @@ import java.util.Map;
 
 import ananas.xgitlite.local.LocalRepoConfig;
 
-public class LocalRepoConfigImpl implements LocalRepoConfig {
+class LocalRepoConfigImpl implements LocalRepoConfig {
 
 	private Core _core;
 

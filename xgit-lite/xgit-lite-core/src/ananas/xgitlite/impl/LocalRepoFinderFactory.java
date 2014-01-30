@@ -9,7 +9,7 @@ import ananas.xgitlite.local.LocalRepoFinder;
 import ananas.xgitlite.local.LocalRepoFinder.Listener;
 import ananas.xgitlite.XGitLite;
 
-public class LocalRepoFinderFactory {
+class LocalRepoFinderFactory {
 
 	public static LocalRepoFinder getUpFinder() {
 		return new MyUpFinder();

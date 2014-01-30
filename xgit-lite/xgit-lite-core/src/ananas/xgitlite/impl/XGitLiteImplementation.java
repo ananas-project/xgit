@@ -13,6 +13,10 @@ public class XGitLiteImplementation extends XGitLite {
 	public ObjectId createObjectId(String id) {
 		return ObjectIdImpl.create(id);
 	}
+	@Override
+	public ObjectId createObjectId(byte[] id) {
+		return ObjectIdImpl.create(id);
+	}
 
 	@Override
 	public LocalRepoFinder getRepoFinder(boolean up) {
@@ -28,5 +32,6 @@ public class XGitLiteImplementation extends XGitLite {
 	public LocalRepo createLocalRepo(File path) {
 		return new LocalRepoImpl(path);
 	}
+
 
 }

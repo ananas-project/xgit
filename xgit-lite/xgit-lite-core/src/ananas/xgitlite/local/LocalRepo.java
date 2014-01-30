@@ -25,7 +25,7 @@ public interface LocalRepo extends Repo {
 
 	LocalRepoConfig getConfig();
 
-	LocalObject getObject(ObjectId id);
+	LocalObjectBank getObjectBank();
 
 	File getWorkingDirectory();
 
