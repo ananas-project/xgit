@@ -3,7 +3,6 @@ package ananas.xgitlite.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,10 +181,10 @@ class LocalObjectBankImpl implements LocalObjectBank {
 			LocalObject obj = new LocalObjectImpl(id, final_file);
 			if (obj.exists()) {
 				// remove tmp file
-				this._out_bfos.cancel();
+				this._out_bfos.finish(null);
 			} else {
 				// move tmp file
-				this._out_bfos.moveTo(final_file);
+				this._out_bfos.finish(final_file);
 			}
 			this._object = obj;
 		}
@@ -200,26 +199,38 @@ class LocalObjectBankImpl implements LocalObjectBank {
 
 	static class BufferedFileOutputStream extends OutputStream {
 
-		private File _tmp_file;
+		private final long _key_value;
+		private final File _tmp_file;
 		private ByteArrayOutputStream _baos;
 		private OutputStream _out;
-		private long _key_value;
 
 		public BufferedFileOutputStream(File file) {
 			this._tmp_file = file;
-			this._baos = new ByteArrayOutputStream(1024);
+			this._baos = new ByteArrayOutputStream(1024 * 4);
 			this._key_value = 1024 * 64;
+			this._out = _baos;
 		}
 
-		public void moveTo(File dest) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void cancel() {
-			if (this._tmp_file.exists()) {
-				this._tmp_file.delete();
+		public void finish(final File mv2) throws IOException {
+			_out.close();
+			final File tmp = _tmp_file;
+			if (mv2 == null) {
+				// remove
+				if (tmp.exists()) {
+					tmp.delete();
+				}
+			} else {
+				// move
+				if (!tmp.exists()) {
+					tmp.getParentFile().mkdirs();
+					OutputStream out = new FileOutputStream(tmp);
+					out.write(_baos.toByteArray());
+					out.close();
+				}
+				tmp.renameTo(mv2);
 			}
+			this._out = null;
+			this._baos = null;
 		}
 
 		private void __check() throws IOException {
@@ -228,7 +239,11 @@ class LocalObjectBankImpl implements LocalObjectBank {
 				return;
 			if (baos.size() >= this._key_value) {
 				_baos = null;
-				FileOutputStream out = new FileOutputStream(this._tmp_file);
+				File file = _tmp_file;
+				if (!file.exists()) {
+					file.getParentFile().mkdirs();
+				}
+				FileOutputStream out = new FileOutputStream(file);
 				out.write(baos.toByteArray());
 				_out = out;
 			}
@@ -259,7 +274,7 @@ class LocalObjectBankImpl implements LocalObjectBank {
 
 		@Override
 		public void close() throws IOException {
-			// _out.close();
+			// do nothing
 		}
 
 	}
