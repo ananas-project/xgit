@@ -3,10 +3,10 @@ package test.ananas.xgitlite;
 import java.io.File;
 import java.io.IOException;
 
-import ananas.xgitlite.LocalRepo;
-import ananas.xgitlite.LocalRepoFinder;
 import ananas.xgitlite.XGLException;
 import ananas.xgitlite.XGitLite;
+import ananas.xgitlite.local.LocalRepo;
+import ananas.xgitlite.local.LocalRepoFinder;
 
 public class TestXGitLite {
 

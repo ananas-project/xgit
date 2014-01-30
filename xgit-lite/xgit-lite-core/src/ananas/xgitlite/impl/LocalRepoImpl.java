@@ -3,10 +3,10 @@ package ananas.xgitlite.impl;
 import java.io.File;
 import java.io.IOException;
 
-import ananas.xgitlite.LocalObject;
-import ananas.xgitlite.LocalRepo;
-import ananas.xgitlite.LocalRepoConfig;
-import ananas.xgitlite.LocalRepoConfig.Core;
+import ananas.xgitlite.local.LocalObject;
+import ananas.xgitlite.local.LocalRepo;
+import ananas.xgitlite.local.LocalRepoConfig;
+import ananas.xgitlite.local.LocalRepoConfig.Core;
 import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.XGLException;
 

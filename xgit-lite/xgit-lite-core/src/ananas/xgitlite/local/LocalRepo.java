@@ -1,7 +1,11 @@
-package ananas.xgitlite;
+package ananas.xgitlite.local;
 
 import java.io.File;
 import java.io.IOException;
+
+import ananas.xgitlite.ObjectId;
+import ananas.xgitlite.Repo;
+import ananas.xgitlite.XGLException;
 
 public interface LocalRepo extends Repo {
 

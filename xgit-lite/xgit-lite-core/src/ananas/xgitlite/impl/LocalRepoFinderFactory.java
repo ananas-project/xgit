@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import ananas.xgitlite.LocalRepo;
-import ananas.xgitlite.LocalRepoFinder;
-import ananas.xgitlite.LocalRepoFinder.Listener;
+import ananas.xgitlite.local.LocalRepo;
+import ananas.xgitlite.local.LocalRepoFinder;
+import ananas.xgitlite.local.LocalRepoFinder.Listener;
 import ananas.xgitlite.XGitLite;
 
 public class LocalRepoFinderFactory {

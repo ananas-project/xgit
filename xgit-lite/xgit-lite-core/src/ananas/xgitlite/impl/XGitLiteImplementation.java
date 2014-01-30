@@ -2,10 +2,10 @@ package ananas.xgitlite.impl;
 
 import java.io.File;
 
-import ananas.xgitlite.LocalRepo;
-import ananas.xgitlite.LocalRepoFinder;
 import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.XGitLite;
+import ananas.xgitlite.local.LocalRepo;
+import ananas.xgitlite.local.LocalRepoFinder;
 
 public class XGitLiteImplementation extends XGitLite {
 

@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
-import ananas.xgitlite.LocalRepoConfig;
+import ananas.xgitlite.local.LocalRepoConfig;
 
 public class LocalRepoConfigImpl implements LocalRepoConfig {
 

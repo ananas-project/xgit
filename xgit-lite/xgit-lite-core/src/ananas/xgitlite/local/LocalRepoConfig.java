@@ -1,4 +1,4 @@
-package ananas.xgitlite;
+package ananas.xgitlite.local;
 
 import java.io.File;
 import java.io.IOException;
