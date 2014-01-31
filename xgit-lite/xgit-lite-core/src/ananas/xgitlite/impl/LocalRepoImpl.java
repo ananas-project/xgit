@@ -20,6 +20,8 @@ class LocalRepoImpl implements LocalRepo {
 	private LocalRepoConfig _config;
 	private LocalObjectBank _obj_bank;
 
+	private MetaIndexManagerImpl _meta_index_man;
+
 	public LocalRepoImpl(File path) {
 		this._repo_dir = path;
 		this._work_dir = path.getParentFile();
@@ -98,14 +100,11 @@ class LocalRepoImpl implements LocalRepo {
 	@Override
 	public void add(File path) throws IOException, XGLException {
 
-		LocalRepo repo = this;
-		IndexBuilder builder = new IndexBuilder(repo);
+		IndexBuilder builder = new IndexBuilder(this);
+		TreeWalker tw = new TreeWalker();
 
 		builder.begin(path);
-
-		TreeWalker tw = new TreeWalker();
 		tw.go(path, builder);
-
 		builder.end();
 
 	}
@@ -127,16 +126,23 @@ class LocalRepoImpl implements LocalRepo {
 		return bank;
 	}
 
+	private MetaIndexManagerImpl __get_MetaIndexManagerImpl() {
+		MetaIndexManagerImpl man = this._meta_index_man;
+		if (man == null) {
+			man = new MetaIndexManagerImpl(this);
+			this._meta_index_man = man;
+		}
+		return man;
+	}
+
 	@Override
 	public IndexManager getIndexManager() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.__get_MetaIndexManagerImpl();
 	}
 
 	@Override
 	public MetaManager getMetaManager() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.__get_MetaIndexManagerImpl();
 	}
 
 }

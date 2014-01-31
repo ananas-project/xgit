@@ -1,5 +1,5 @@
 package ananas.xgitlite.local;
 
-public interface LocalIndexManager {
+public interface IndexList {
 
 }

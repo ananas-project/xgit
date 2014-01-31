@@ -1,9 +1,9 @@
 package ananas.xgitlite.local;
 
-import java.io.File;
+import ananas.xgitlite.util.PathInRepo;
 
 public interface IndexManager {
 
-	LocalIndex getIndex(File base);
+	IndexList getIndex(PathInRepo path);
 
 }
