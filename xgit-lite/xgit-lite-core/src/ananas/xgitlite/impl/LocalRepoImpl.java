@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 import ananas.xgitlite.XGLException;
+import ananas.xgitlite.local.IndexManager;
 import ananas.xgitlite.local.LocalObjectBank;
 import ananas.xgitlite.local.LocalRepo;
 import ananas.xgitlite.local.LocalRepoConfig;
 import ananas.xgitlite.local.LocalRepoConfig.Core;
+import ananas.xgitlite.local.MetaManager;
 import ananas.xgitlite.util.IndexBuilder;
 import ananas.xgitlite.util.TreeWalker;
 
@@ -94,7 +96,7 @@ class LocalRepoImpl implements LocalRepo {
 	}
 
 	@Override
-	public void add(File path) {
+	public void add(File path) throws IOException, XGLException {
 
 		LocalRepo repo = this;
 		IndexBuilder builder = new IndexBuilder(repo);
@@ -123,6 +125,18 @@ class LocalRepoImpl implements LocalRepo {
 			this._obj_bank = bank;
 		}
 		return bank;
+	}
+
+	@Override
+	public IndexManager getIndexManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MetaManager getMetaManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

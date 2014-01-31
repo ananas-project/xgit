@@ -26,6 +26,10 @@ public interface LocalRepo extends Repo {
 
 	LocalObjectBank getObjectBank();
 
+	IndexManager getIndexManager();
+
+	MetaManager getMetaManager();
+
 	File getWorkingDirectory();
 
 	File getRepoDirectory();
@@ -34,7 +38,7 @@ public interface LocalRepo extends Repo {
 
 	void check() throws XGLException, IOException;
 
-	void add(File path);
+	void add(File path) throws IOException, XGLException;
 
 	void commit(File path);
 }
