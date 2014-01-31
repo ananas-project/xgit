@@ -32,4 +32,8 @@ public class PathInRepo {
 		return _repo;
 	}
 
+	public String toString() {
+		return _path;
+	}
+
 }

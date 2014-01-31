@@ -8,7 +8,8 @@ import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.XGLException;
 import ananas.xgitlite.XGLObject;
 import ananas.xgitlite.XGitLite;
-import ananas.xgitlite.local.IndexList;
+import ananas.xgitlite.local.IndexInfo;
+import ananas.xgitlite.local.IndexListWriter;
 import ananas.xgitlite.local.LocalObject;
 import ananas.xgitlite.local.LocalRepo;
 import ananas.xgitlite.local.MetaInfo;
@@ -16,8 +17,7 @@ import ananas.xgitlite.local.MetaInfo;
 public class IndexBuilder implements FileFilter {
 
 	private final LocalRepo _repo;
-	private PathInRepo _index_base;
-	private IndexList _index;
+	private IndexListWriter _index_writer;
 
 	// private File _index_root;
 
@@ -66,6 +66,11 @@ public class IndexBuilder implements FileFilter {
 		final PathInRepo pir = PathInRepo.newInstance(_repo, path);
 		final MetaInfo meta = _repo.getMetaManager().getMeta(pir);
 
+		final IndexInfo info = new IndexInfo();
+		info.last_mod = path.lastModified();
+		info.length = path.length();
+		info.path = pir;
+
 		ObjectId id = null;
 		if (meta.load()) {
 
@@ -90,16 +95,19 @@ public class IndexBuilder implements FileFilter {
 
 		if (id == null) {
 			// re-hash
+
 			LocalObject obj = _repo.getObjectBank().addObject(
 					XGLObject.Type.blob, path);
 			id = obj.getId();
 			meta.setId(id.toString());
-			meta.setLastModified(path.lastModified());
+			meta.setLastModified(info.last_mod);
 			meta.setLength(path.length());
 			meta.save();
 			System.out.println("re-hash id:" + id + " path:" + pir.getPath());
 		}
 
+		info.id = id;
+		this._index_writer.write(info);
 	}
 
 	/**
@@ -109,16 +117,12 @@ public class IndexBuilder implements FileFilter {
 	 * @throws XGLException
 	 * */
 	public void begin(File path) throws XGLException, IOException {
-
 		PathInRepo pir = PathInRepo.newInstance(this._repo, path);
-		this._index_base = pir;
-		this._index = _repo.getIndexManager().getIndex(pir);
-
+		this._index_writer = _repo.getIndexManager().getIndex(pir).openWriter();
 	}
 
-	public void end() {
-		// TODO Auto-generated method stub
-
+	public void end() throws IOException {
+		this._index_writer.close();
 	}
 
 	static class MyHelper {
