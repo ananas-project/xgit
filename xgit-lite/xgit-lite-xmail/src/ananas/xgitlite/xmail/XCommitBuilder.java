@@ -5,6 +5,8 @@ import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import ananas.xgitlite.Repo;
+
 public interface XCommitBuilder {
 
 	Map<String, Link> getLinkMap();
@@ -16,5 +18,7 @@ public interface XCommitBuilder {
 	Element getBody();
 
 	XCommit build();
+
+	Repo getRepo();
 
 }

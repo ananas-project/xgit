@@ -4,12 +4,16 @@ import java.io.File;
 
 import ananas.xgitlite.ObjectId;
 
-public class Link {
+public interface Link {
 
-	public String name;
-	public long size;
-	public File local_file;
-	public String type;
-	public ObjectId object;
+	String name();
+
+	long size();
+
+	File local_file();
+
+	String type();
+
+	ObjectId id();
 
 }
