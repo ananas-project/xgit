@@ -1,0 +1,21 @@
+<xmail xmlns='http://github.com/'>
+	<head>
+
+		<title>hello, world</title>
+
+		<link size='1920' type='image/png' object='7cd1167ef848977f467189b8610045191e664266'
+			name='icon.png' />
+
+		<meta http-equiv="Content-Type" content="text/xmail; charset=utf-8" />
+
+
+	</head>
+
+
+
+	<body>
+
+		<anything xmlns='abc.com'> content ... </anything>
+
+	</body>
+</xmail>
