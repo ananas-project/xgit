@@ -3,14 +3,18 @@ package ananas.xgitlite.xmail.impl;
 import java.util.List;
 
 import ananas.xgitlite.ObjectId;
-import ananas.xgitlite.Repo;
+import ananas.xgitlite.local.LocalRepo;
 import ananas.xgitlite.xmail.Link;
 import ananas.xgitlite.xmail.XCommit;
 
-  class XCommitImpl implements XCommit {
+class XCommitImpl implements XCommit {
 
-	public XCommitImpl(ObjectId id) {
-		// TODO Auto-generated constructor stub
+	private final LocalRepo _repo;
+	private final ObjectId _id;
+
+	public XCommitImpl(LocalRepo repo, ObjectId id) {
+		this._repo = repo;
+		this._id = id;
 	}
 
 	@Override
@@ -21,14 +25,12 @@ import ananas.xgitlite.xmail.XCommit;
 
 	@Override
 	public ObjectId getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this._id;
 	}
 
 	@Override
-	public Repo getRepo() {
-		// TODO Auto-generated method stub
-		return null;
+	public LocalRepo getRepo() {
+		return this._repo;
 	}
 
 	@Override

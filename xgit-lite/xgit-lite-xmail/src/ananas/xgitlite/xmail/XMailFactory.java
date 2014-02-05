@@ -1,12 +1,12 @@
 package ananas.xgitlite.xmail;
 
 import ananas.xgitlite.ObjectId;
-import ananas.xgitlite.Repo;
+import ananas.xgitlite.local.LocalRepo;
 
 public interface XMailFactory {
 
-	XCommitBuilder createBuilder(Repo repo);
+	XCommitBuilder createBuilder(LocalRepo repo);
 
-	XCommit getCommit(ObjectId id);
+	XCommit getCommit(LocalRepo repo, ObjectId id);
 
 }

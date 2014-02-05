@@ -3,7 +3,7 @@ package ananas.xgitlite.xmail;
 import java.util.List;
 
 import ananas.xgitlite.ObjectId;
-import ananas.xgitlite.Repo;
+import ananas.xgitlite.local.LocalRepo;
 
 public interface XCommit {
 
@@ -11,7 +11,7 @@ public interface XCommit {
 
 	ObjectId getId();
 
-	Repo getRepo();
+	LocalRepo getRepo();
 
 	void push();
 

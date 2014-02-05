@@ -3,13 +3,22 @@ package ananas.xgitlite.xmail;
 import java.io.File;
 
 import ananas.xgitlite.ObjectId;
+import ananas.xgitlite.local.LocalObject;
 
 public class DefaultLink implements Link {
 
+	private final LocalObject _obj;
+	private String _name;
+	private String _type;
+	private File _file;
+
+	public DefaultLink(LocalObject obj) {
+		this._obj = obj;
+	}
+
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
-		return null;
+		return this._name;
 	}
 
 	@Override
@@ -20,20 +29,17 @@ public class DefaultLink implements Link {
 
 	@Override
 	public File local_file() {
-		// TODO Auto-generated method stub
-		return null;
+		return this._file;
 	}
 
 	@Override
 	public String type() {
-		// TODO Auto-generated method stub
-		return null;
+		return this._type;
 	}
 
 	@Override
 	public ObjectId id() {
-		// TODO Auto-generated method stub
-		return null;
+		return this._obj.getId();
 	}
 
 }

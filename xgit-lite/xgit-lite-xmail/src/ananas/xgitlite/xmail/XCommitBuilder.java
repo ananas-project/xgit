@@ -1,12 +1,14 @@
 package ananas.xgitlite.xmail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import ananas.xgitlite.Repo;
+import ananas.xgitlite.XGLException;
+import ananas.xgitlite.local.LocalRepo;
 
 public interface XCommitBuilder {
 
@@ -18,10 +20,10 @@ public interface XCommitBuilder {
 
 	Element getBody();
 
-	XCommit build();
+	XCommit build() throws IOException, XGLException;
 
-	Repo getRepo();
+	LocalRepo getRepo();
 
-	Link addLink(File file);
+	Link addLink(File file) throws IOException, XGLException;
 
 }
