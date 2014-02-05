@@ -1,20 +1,20 @@
 package ananas.xgitlite.xmail;
 
-import ananas.xgitlite.ObjectId;
-import ananas.xgitlite.Repo;
+public class DefaultXMailFactory extends XMailFactoryWrapper {
 
-public class DefaultXMailFactory implements XMailFactory {
-
-	@Override
-	public XCommitBuilder createBuilder(Repo repo) {
-		// TODO Auto-generated method stub
-		return null;
+	public DefaultXMailFactory() {
+		super(initFactory());
 	}
 
-	@Override
-	public XCommit getCommit(ObjectId id) {
-		// TODO Auto-generated method stub
-		return null;
+	private static XMailFactory initFactory() {
+		try {
+			String className = "ananas.xgitlite.xmail.impl.XMailFactoryImpl";
+			Class<?> aClass = Class.forName(className);
+			return (XMailFactory) aClass.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

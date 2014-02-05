@@ -1,5 +1,6 @@
 package ananas.xgitlite.xmail;
 
+import java.io.File;
 import java.util.Map;
 
 import org.w3c.dom.Document;
@@ -20,5 +21,7 @@ public interface XCommitBuilder {
 	XCommit build();
 
 	Repo getRepo();
+
+	Link addLink(File file);
 
 }

@@ -13,4 +13,6 @@ public interface XCommit {
 
 	Repo getRepo();
 
+	void push();
+
 }
