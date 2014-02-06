@@ -6,4 +6,13 @@ public interface XMail {
 
 	String mime_type = "text/xmail";
 
+	interface LocalName {
+
+		String xmail = "xmail";
+		String head = "head";
+		String body = "body";
+		String meta = "meta";
+		String link = "link";
+
+	}
 }

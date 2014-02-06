@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
+import org.xml.sax.SAXException;
+
+import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.XGLException;
 import ananas.xgitlite.XGitLite;
 import ananas.xgitlite.local.LocalRepo;
@@ -25,7 +29,9 @@ public class TestXMail {
 		}
 	}
 
-	private void run() throws IOException, XGLException {
+	private void run() throws IOException, XGLException, SAXException {
+
+		// add
 		LocalRepoFinder finder = XGitLite.getInstance().getRepoFinder(true);
 		File path = this.getPath();
 		LocalRepo repo = finder.find(path, null)[0];
@@ -37,6 +43,21 @@ public class TestXMail {
 		commit.push();
 		System.out.println("commit " + commit.getId());
 
+		// checkout
+		commit = xmf.getCommit(repo, commit.getId());
+		List<Link> links = commit.getLinks();
+		for (Link link2 : links) {
+
+			ObjectId id = link2.id();
+			String name = link2.name();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("    link ");
+			sb.append(id);
+			sb.append(" ");
+			sb.append(name);
+			System.out.println(sb);
+		}
 	}
 
 	private File findFile(final File path, String suffix) {

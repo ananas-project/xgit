@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
 import ananas.xgitlite.XGLException;
@@ -85,17 +84,14 @@ class XCommitBuilderImpl implements XCommitBuilder {
 		DOMImplementationLS ls = (DOMImplementationLS) this._doc
 				.getImplementation().getFeature("LS", "3.0");
 
-		LSSerializer ser = ls.createLSSerializer();
-
-		String text = ser.writeToString(_doc);
-
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		Writer wtr = new OutputStreamWriter(baos);
-		wtr.write(text);
-		wtr.flush();
-		wtr.close();
-		byte[] ba = baos.toByteArray();
+		LSSerializer ser = ls.createLSSerializer();
+		LSOutput output = ls.createLSOutput();
+		output.setByteStream(baos);
+		output.setEncoding("UTF-8");
+		ser.write(_doc, output);
 
+		byte[] ba = baos.toByteArray();
 		LocalObjectBank bank = this._repo.getObjectBank();
 		LocalObject obj = bank.addObject(XMail.mime_type, ba.length,
 				new ByteArrayInputStream(ba));
