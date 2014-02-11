@@ -78,6 +78,9 @@ class XCommitImpl implements XCommit {
 
 		public List<Link> getLinks() {
 			// TODO Auto-generated method stub
+
+			_doc.hashCode();
+
 			return null;
 		}
 

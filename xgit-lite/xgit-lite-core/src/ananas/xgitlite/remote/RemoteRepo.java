@@ -5,7 +5,10 @@ import ananas.xgitlite.Repo;
 
 public interface RemoteRepo extends Repo {
 
-	
-	 RemoteObject  getObject ( ObjectId id ) ;
-	
+	RemoteObject getObject(ObjectId id);
+
+	void pull();
+
+	void push();
+
 }
