@@ -2,6 +2,7 @@ package ananas.xgitlite.xmail;
 
 import ananas.xgitlite.ObjectId;
 import ananas.xgitlite.local.LocalRepo;
+import ananas.xgitlite.xmail.client.XMailClientFactory;
 
 public class XMailFactoryWrapper implements XMailFactory {
 
@@ -19,6 +20,11 @@ public class XMailFactoryWrapper implements XMailFactory {
 	@Override
 	public XCommit getCommit(LocalRepo repo, ObjectId id) {
 		return target.getCommit(repo, id);
+	}
+
+	@Override
+	public XMailClientFactory getXMailClientFactory() {
+		return target.getXMailClientFactory();
 	}
 
 }

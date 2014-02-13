@@ -12,6 +12,8 @@ public interface XMailClient {
 
 	RemoteRepo getRemoteRepo();
 
-	XCommit commit(File path);
+	XCommit commit(File path, boolean _R);
+
+	void push(XCommit commit);
 
 }
