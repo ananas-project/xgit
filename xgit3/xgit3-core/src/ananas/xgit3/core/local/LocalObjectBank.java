@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
 
 public interface LocalObjectBank extends DirectoryNode {
@@ -18,5 +19,17 @@ public interface LocalObjectBank extends DirectoryNode {
 	File getTempDirectory();
 
 	File newTempFile(String ref_name);
+
+	LocalObjectPathGenerator getPathGenerator();
+
+	HashAlgorithmProvider  getHashAlgorithmProvider ();
+
+	class Factory {
+
+		public static LocalObjectBankFactory getFactory() {
+			return ThisModule.getModule().newBankFactory();
+		}
+
+	}
 
 }

@@ -5,15 +5,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
 import ananas.xgit3.core.local.LocalObject;
 import ananas.xgit3.core.local.LocalObjectBank;
+import ananas.xgit3.core.local.LocalObjectPathGenerator;
 
 public class DefaultBank implements LocalObjectBank {
 
 	private final File _bank_dir;
 	private final File _temp_dir;
-	private final int _path_depth;
+	private final HashAlgorithmProvider _hash_provider;
+	private final LocalObjectPathGenerator _path_gen;
 	private int _temp_index;
 
 	/**
@@ -22,21 +25,26 @@ public class DefaultBank implements LocalObjectBank {
 	 * @param tmpDir
 	 *            , the temp directory of this bank, if null, set to default
 	 *            value '{path}/temp'.
-	 * @param pathDepth
-	 *            the depth of path for object in this bank, if 0, set to
-	 *            default '2'.
+	 * 
 	 * */
 
-	public DefaultBank(File path, File tmpDir, int pathDepth) {
-		this._bank_dir = path;
+	public DefaultBank(File path, File tmpDir,
+			HashAlgorithmProvider hash_provider,
+			LocalObjectPathGenerator path_gen) {
+
 		if (tmpDir == null) {
 			tmpDir = new File(path, "temp");
 		}
-		if (pathDepth < 2)
-			pathDepth = 2;
-		if (pathDepth > 10)
-			pathDepth = 10;
-		this._path_depth = pathDepth;
+		if (hash_provider == null) {
+			hash_provider = new DefaultHashAlgorithmProvider("SHA-256");
+		}
+		if (path_gen == null) {
+			path_gen = new DefaultLocalObjectPathGenerator("xx/xxxx");
+		}
+
+		this._hash_provider = hash_provider;
+		this._path_gen = path_gen;
+		this._bank_dir = path;
 		this._temp_dir = tmpDir;
 	}
 
@@ -47,22 +55,8 @@ public class DefaultBank implements LocalObjectBank {
 
 	@Override
 	public LocalObject get(HashID id) {
-		String off = this.getOffsetPath(id);
-		File file = new File(this._bank_dir, off);
+		File file = this._path_gen.gen(id, _bank_dir);
 		return new DefaultLocalObject(this, id, file);
-	}
-
-	private String getOffsetPath(HashID id) {
-		final char sep = File.separatorChar;
-		final StringBuilder sb = new StringBuilder();
-		final String s = id.toString();
-		int i = 0;
-		for (; i < this._path_depth; i += 2) {
-			sb.append(s.substring(i, i + 2));
-			sb.append(sep);
-		}
-		sb.append(s.substring(i));
-		return sb.toString();
 	}
 
 	@Override
@@ -70,7 +64,8 @@ public class DefaultBank implements LocalObjectBank {
 			throws IOException {
 
 		File tmp = this.newTempFile(type + "  " + length);
-		LocalObjectBuilder builder = new LocalObjectBuilder(type, length, tmp);
+		LocalObjectBuilder builder = new LocalObjectBuilder(type, length, tmp,
+				this._hash_provider);
 		builder.begin();
 		builder.loadData(in);
 		builder.end();
@@ -123,6 +118,16 @@ public class DefaultBank implements LocalObjectBank {
 		sb.append(ref);
 		sb.append(".temp");
 		return new File(this._temp_dir, sb.toString());
+	}
+
+	@Override
+	public LocalObjectPathGenerator getPathGenerator() {
+		return this._path_gen;
+	}
+
+	@Override
+	public HashAlgorithmProvider getHashAlgorithmProvider() {
+		return this._hash_provider;
 	}
 
 }

@@ -2,8 +2,8 @@ package ananas.xgit3.core.util;
 
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
+import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
 
 public class HashOutputStream extends AbstractOutputStream {
@@ -11,14 +11,8 @@ public class HashOutputStream extends AbstractOutputStream {
 	private final MessageDigest _md;
 	private HashID _id;
 
-	public HashOutputStream(String algorithm) {
-		MessageDigest md = null;
-		try {
-			md = MessageDigest.getInstance(algorithm);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		this._md = md;
+	public HashOutputStream(HashAlgorithmProvider hap) {
+		this._md = hap.createMessageDigest();
 	}
 
 	@Override

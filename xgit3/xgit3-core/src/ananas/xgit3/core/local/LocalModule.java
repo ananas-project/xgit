@@ -4,4 +4,6 @@ public interface LocalModule {
 
 	LocalRepoFinder newRepoFinder(String direction);
 
+	LocalObjectBankFactory newBankFactory();
+
 }

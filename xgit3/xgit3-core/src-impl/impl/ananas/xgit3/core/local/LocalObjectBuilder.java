@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.zip.DeflaterOutputStream;
 
+import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
 import ananas.xgit3.core.util.AbstractOutputStream;
 import ananas.xgit3.core.util.HashOutputStream;
@@ -21,6 +22,7 @@ public class LocalObjectBuilder {
 	private final long _length;
 	private final String _type;
 	private final Output _final_out;
+	private final HashAlgorithmProvider _hash_provider;
 	private OutputStream _final_out_stream;
 	private HashOutputStream _hash_out_stream;
 	// //
@@ -28,7 +30,9 @@ public class LocalObjectBuilder {
 	private HashID _id;
 	private long _count_content_byte;
 
-	public LocalObjectBuilder(String type, long length, File tmpFile) {
+	public LocalObjectBuilder(String type, long length, File tmpFile,
+			HashAlgorithmProvider hap) {
+		this._hash_provider = hap;
 		this._type = type;
 		this._length = length;
 		// this._tmp_file = tmpFile;
@@ -61,7 +65,7 @@ public class LocalObjectBuilder {
 	public void begin() {
 		try {
 
-			this._hash_out_stream = new HashOutputStream("SHA-256");
+			this._hash_out_stream = new HashOutputStream(this._hash_provider);
 			this._final_out_stream = new DeflaterOutputStream(
 					_final_out.getOutputStream());
 
