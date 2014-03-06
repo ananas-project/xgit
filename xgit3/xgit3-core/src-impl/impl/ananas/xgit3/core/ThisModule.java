@@ -7,14 +7,12 @@ public class ThisModule implements CoreModule {
 
 	@Override
 	public HashID newHashID(String s) {
-		// TODO Auto-generated method stub
-		return null;
+		return DefaultHashID.create(s);
 	}
 
 	@Override
 	public HashID newHashID(byte[] b) {
-		// TODO Auto-generated method stub
-		return null;
+		return DefaultHashID.create(b);
 	}
 
 }
