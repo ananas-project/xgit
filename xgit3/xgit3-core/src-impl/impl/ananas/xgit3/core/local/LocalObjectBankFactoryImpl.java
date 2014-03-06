@@ -12,8 +12,8 @@ public class LocalObjectBankFactoryImpl implements LocalObjectBankFactory {
 
 	@Override
 	public LocalObjectBank createBank(File path) {
-		// TODO Auto-generated method stub
-		return null;
+		LocalObjectBank bank = new DefaultBank(path, null, null, null);
+		return bank;
 	}
 
 	@Override

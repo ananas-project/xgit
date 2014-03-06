@@ -46,7 +46,7 @@ public class DefaultLocalObject implements LocalObject {
 
 	@Override
 	public OutputStream openZippedOutputStream() throws IOException {
-		// TODO Auto-generated method stub
+		// TODO
 		return null;
 	}
 
