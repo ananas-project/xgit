@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
@@ -63,25 +64,19 @@ public class DefaultBank implements LocalObjectBank {
 	public LocalObject add(String type, long length, InputStream in)
 			throws IOException {
 
-		File tmp = this.newTempFile(type + "  " + length);
-		LocalObjectBuilder builder = new LocalObjectBuilder(type, length, tmp,
-				this._hash_provider);
-		builder.begin();
-		builder.loadData(in);
-		builder.end();
-		Throwable err = builder.getError();
-		if (err == null) {
-			HashID id = builder.getId();
-			LocalObject obj = this.get(id);
-			if (obj.exists())
-				builder.drop();
-			else
-				builder.moveTo(obj.getPath());
-			return obj;
-		} else {
-			builder.drop();
-			throw new RuntimeException(err);
+		LocalObjectBank bank = this;
+		byte[] buf = new byte[1024];
+		SuperLocalObjectBuilder builder = SuperLocalObjectBuilder.Factory
+				.newPlainBuilder(bank);
+		OutputStream out = builder.openOutputStream(type, length);
+		for (;;) {
+			int cb = in.read(buf);
+			if (cb < 0)
+				break;
+			out.write(buf, 0, cb);
 		}
+		out.close();
+		return builder.getResult();
 	}
 
 	@Override

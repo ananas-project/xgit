@@ -97,7 +97,7 @@ final class DefaultLocalRepoFinder implements LocalRepoFinder {
 
 		@Override
 		public void begin() {
-			System.out.println("search begin");
+			// System.out.println("search begin");
 		}
 
 		@Override
@@ -115,12 +115,12 @@ final class DefaultLocalRepoFinder implements LocalRepoFinder {
 
 		@Override
 		public void findInDirectory(File path) {
-			System.out.println("search repo in directory: " + path);
+			// System.out.println("search repo in directory: " + path);
 		}
 
 		@Override
 		public void end() {
-			System.out.println("search end");
+			// System.out.println("search end");
 		}
 	}
 
