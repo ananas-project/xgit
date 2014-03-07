@@ -12,7 +12,7 @@ public class LocalObjectBankFactoryImpl implements LocalObjectBankFactory {
 
 	@Override
 	public LocalObjectBank createBank(File path) {
-		LocalObjectBank bank = new DefaultBank(path, null, null, null);
+		LocalObjectBank bank = new DefaultLocalBank(path, null, null, null);
 		return bank;
 	}
 

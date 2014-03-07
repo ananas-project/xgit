@@ -24,7 +24,7 @@ public class DefaultLocalRepo implements LocalRepo {
 		LocalObjectBank bank = this._bank;
 		if (bank == null) {
 			File path = new File(this._path, "objects");
-			bank = new DefaultBank(path, null, null, null);
+			bank = new DefaultLocalBank(path, null, null, null);
 			this._bank = bank;
 		}
 		return bank;

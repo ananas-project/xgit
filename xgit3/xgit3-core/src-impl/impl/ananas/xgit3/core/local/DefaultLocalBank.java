@@ -12,7 +12,7 @@ import ananas.xgit3.core.local.LocalObject;
 import ananas.xgit3.core.local.LocalObjectBank;
 import ananas.xgit3.core.local.LocalObjectPathGenerator;
 
-public class DefaultBank implements LocalObjectBank {
+public class DefaultLocalBank implements LocalObjectBank {
 
 	private final File _bank_dir;
 	private final File _temp_dir;
@@ -29,7 +29,7 @@ public class DefaultBank implements LocalObjectBank {
 	 * 
 	 * */
 
-	public DefaultBank(File path, File tmpDir,
+	public DefaultLocalBank(File path, File tmpDir,
 			HashAlgorithmProvider hash_provider,
 			LocalObjectPathGenerator path_gen) {
 
@@ -66,7 +66,7 @@ public class DefaultBank implements LocalObjectBank {
 
 		LocalObjectBank bank = this;
 		byte[] buf = new byte[1024];
-		SuperLocalObjectBuilder builder = SuperLocalObjectBuilder.Factory
+		LocalObjectBuilder builder = LocalObjectBuilder.Factory
 				.newPlainBuilder(bank);
 		OutputStream out = builder.openOutputStream(type, length);
 		for (;;) {

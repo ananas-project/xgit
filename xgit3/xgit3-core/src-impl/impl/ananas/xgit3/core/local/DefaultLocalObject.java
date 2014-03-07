@@ -46,7 +46,7 @@ public class DefaultLocalObject implements LocalObject {
 
 	@Override
 	public OutputStream openZippedOutputStream() throws IOException {
-		SuperLocalObjectBuilder builder = SuperLocalObjectBuilder.Factory
+		LocalObjectBuilder builder = LocalObjectBuilder.Factory
 				.newZippedBuilder(this);
 		return builder.openOutputStream(null, 0);
 	}
