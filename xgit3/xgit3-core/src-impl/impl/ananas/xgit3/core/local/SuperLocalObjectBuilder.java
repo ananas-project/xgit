@@ -390,6 +390,9 @@ public interface SuperLocalObjectBuilder {
 
 		@Override
 		public void saveTo(File dest) throws IOException {
+
+			// System.out.println(this + ".save to " + dest);
+
 			byte[] ba = _baos.toByteArray();
 			File parent = dest.getParentFile();
 			if (!parent.exists()) {
@@ -402,6 +405,8 @@ public interface SuperLocalObjectBuilder {
 
 		@Override
 		public void drop() {
+			// System.out.println(this + ".drop " + this._baos.size() +
+			// " bytes");
 			this._baos.reset();
 		}
 
@@ -435,6 +440,9 @@ public interface SuperLocalObjectBuilder {
 
 		@Override
 		public void saveTo(File dest) {
+
+			// System.out.println(this + ".save to " + dest);
+
 			if (this._tmp_file.exists()) {
 				File parent = dest.getParentFile();
 				if (!parent.exists()) {
@@ -446,11 +454,12 @@ public interface SuperLocalObjectBuilder {
 
 		@Override
 		public void drop() {
+			// System.out.println(this + ".drop " + this._tmp_file.length()
+			// + " bytes");
 			if (this._tmp_file.exists()) {
 				this._tmp_file.delete();
 			}
 		}
-
 	}
 
 	static class NopZippedOutputStream implements FinalOutput {
