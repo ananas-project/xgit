@@ -4,7 +4,9 @@ import impl.ananas.xgit3.core.local.tree.DefaultTreeMaker;
 
 import java.io.File;
 
+import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.local.LocalObjectBank;
+import ananas.xgit3.core.local.LocalObjectPathGenerator;
 import ananas.xgit3.core.local.LocalRepo;
 import ananas.xgit3.core.local.ext.XGitExtends;
 import ananas.xgit3.core.local.tree.TreeMaker;
@@ -29,7 +31,11 @@ public class DefaultLocalRepo implements LocalRepo {
 		LocalObjectBank bank = this._bank;
 		if (bank == null) {
 			File path = new File(this._path, "objects");
-			bank = new DefaultLocalBank(path, null, null, null);
+			HashAlgorithmProvider hash = new DefaultHashAlgorithmProvider(
+					"SHA-1");
+			LocalObjectPathGenerator pathGen = new DefaultLocalObjectPathGenerator(
+					"xx/xxxx");
+			bank = new DefaultLocalBank(path, null, hash, pathGen);
 			this._bank = bank;
 		}
 		return bank;

@@ -99,14 +99,15 @@ public class DefaultFileTracker implements FileTracker {
 		private String _path_hash;
 
 		public MyFileTracking(File prop_path, Properties prop, File target_path) {
+			String hp1 = Helper.getString(prop, Key.path_hash);
+			String hp2 = Helper.hashFilePath(target_path);
 			this._prop_path = prop_path;
 			this._target_path = target_path;
 			this._id = Helper.getHashID(prop, Key.id);
-			this._path_hash = Helper.hashFilePath(target_path);
+			this._path_hash = hp2;
 			this._length = Helper.getLong(prop, Key.length);
 			this._last_mod = Helper.getLong(prop, Key.lastMod);
-			String hp = Helper.getString(prop, Key.path_hash);
-			if (!this._prop_path.equals(hp)) {
+			if (!hp1.equals(hp2)) {
 				this._id = null;
 			}
 		}
