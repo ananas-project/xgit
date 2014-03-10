@@ -5,9 +5,14 @@ import impl.ananas.xgit3.core.local.tree.DefaultTreeMaker;
 import java.io.File;
 
 import ananas.xgit3.core.HashAlgorithmProvider;
+import ananas.xgit3.core.HashID;
+import ananas.xgit3.core.local.LocalBlob;
+import ananas.xgit3.core.local.LocalCommit;
 import ananas.xgit3.core.local.LocalObjectBank;
 import ananas.xgit3.core.local.LocalObjectPathGenerator;
 import ananas.xgit3.core.local.LocalRepo;
+import ananas.xgit3.core.local.LocalTag;
+import ananas.xgit3.core.local.LocalTree;
 import ananas.xgit3.core.local.ext.XGitExtends;
 import ananas.xgit3.core.local.tree.TreeMaker;
 
@@ -55,6 +60,26 @@ public class DefaultLocalRepo implements LocalRepo {
 	@Override
 	public TreeMaker getTreeMaker() {
 		return new DefaultTreeMaker();
+	}
+
+	@Override
+	public LocalTree getTree(HashID id) {
+		return new LocalGitTree(this.getBank(), id);
+	}
+
+	@Override
+	public LocalCommit getCommit(HashID id) {
+		return new LocalGitCommit(this.getBank(), id);
+	}
+
+	@Override
+	public LocalBlob getBlob(HashID id) {
+		return new LocalGitBlob(this.getBank(), id);
+	}
+
+	@Override
+	public LocalTag getTag(HashID id) {
+		return new LocalGitTag(this.getBank(), id);
 	}
 
 }
