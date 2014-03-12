@@ -56,7 +56,7 @@ final class RemoteRepoFinderImpl implements RemoteRepoFinder {
 		// ping repo
 		RemoteRepo repo = _context.getRepo(info);
 		JSONRequest req = repo.createJSONRequest();
-		req.setTarget("getBucketInfo", "Bucket", null);
+		req.setTarget("getInfo", "Bucket", null);
 		req.setParameter("location", uri);
 		JSONObject resp = req.request();
 		info.putJSONInfo(resp);
