@@ -2,16 +2,12 @@ package ananas.xgit3.core.remote;
 
 public interface RemoteRepo {
 
+	RemoteContext getContext();
+
+	RemoteRepoInfo getInfo();
+
 	RemoteObjectBank getBank();
 
-	String getControlEndpointURI();
-
-	class Factory {
-
-		public static RemoteRepo create(RemoteRepoInfo info) {
-			return ThisModule.getModule().newRemoteRepo(info);
-		}
-
-	}
+	JSONRequest createJSONRequest();
 
 }
