@@ -16,7 +16,7 @@ public interface JSONRequest {
 
 	void setToken(String token);
 
-	void setTarget(String mehtod, String aClassName, String id);
+	void setTarget(String method, String aClassName, String id);
 
 	void setClass(String aClassName);
 
