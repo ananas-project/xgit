@@ -6,4 +6,6 @@ public interface JRError {
 	String need_parameter = "need_parameter";
 	String need_auth = "need_auth";
 
+	String bad_token = "bad_token";
+
 }
