@@ -4,6 +4,7 @@ import ananas.xgit3.core.HashID;
 import ananas.xgit3.core.remote.JSONRequest;
 import ananas.xgit3.core.remote.RemoteRepo;
 import ananas.xgit3.core.remote.protocol.jsonreq.JRCore;
+import ananas.xgit3.core.util.Base64;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -36,7 +37,8 @@ public class DefaultJRAuth implements JRAuth {
 		private String _passwd;
 		private String _mech;
 		private String _step;
-		private String _base64_data;
+		private String _base64_auth;
+		private String _base64_challenge;
 		private JSONObject _resp;
 		private HashID _token;
 
@@ -47,28 +49,20 @@ public class DefaultJRAuth implements JRAuth {
 			req.setTarget(JRAuth.method_register, JRAuth.class_name, null);
 			req.setToken(this._token);
 			req.setParameter(JRAuth.RegisterAuth.Request.mechanism, this._mech);
-			req.setParameter(JRAuth.RegisterAuth.Request.step, this._step);
-			req.setParameter(JRAuth.RegisterAuth.Request.data,
-					this._base64_data);
+			req.setParameter(JRAuth.RegisterAuth.Request.step, _step);
+			req.setParameter(JRAuth.RegisterAuth.Request.auth, _base64_auth);
 
 			JSONObject resp = req.request();
 			this._resp = resp;
+			this._base64_challenge = resp
+					.getString(JRAuth.RegisterAuth.Response.challenge);
+
 			return (resp.getBooleanValue(JRCore.Response.success));
 		}
 
 		@Override
 		public void setMechanism(String string) {
 			this._mech = string;
-		}
-
-		@Override
-		public void setUserName(String username) {
-			this._user_name = username;
-		}
-
-		@Override
-		public void setPassword(String string) {
-			this._passwd = string;
 		}
 
 		@Override
@@ -79,6 +73,22 @@ public class DefaultJRAuth implements JRAuth {
 		@Override
 		public void setToken(HashID token) {
 			this._token = token;
+		}
+
+		@Override
+		public void setAuth(byte[] auth) {
+			if (auth == null)
+				this._base64_auth = null;
+			else
+				this._base64_auth = Base64.encode(auth);
+		}
+
+		@Override
+		public byte[] getChallenge() {
+			String str = this._base64_challenge;
+			if (str == null)
+				return null;
+			return Base64.decode(str);
 		}
 	}
 

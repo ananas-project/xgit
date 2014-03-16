@@ -27,7 +27,7 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String step = "step";
-			String data = "data"; // base64 binary
+			String auth = "auth"; // base64 binary
 
 		}
 
@@ -35,16 +35,16 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String next_step = "next_step";
-			String data = "data"; // base64 binary
+			String challenge = "challenge"; // base64 binary
 			String result = "result"; // [ "success" | error ]
 
 		}
 
 		void setMechanism(String string);
 
-		void setUserName(String string);
+		void setAuth(byte[] auth);
 
-		void setPassword(String string);
+		byte[] getChallenge();
 
 	}
 
@@ -54,7 +54,7 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String step = "step";
-			String data = "data"; // base64 binary
+			String auth = "auth"; // base64 binary
 
 		}
 
@@ -62,7 +62,7 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String next_step = "next_step";
-			String data = "data"; // base64 binary
+			String challenge = "challenge"; // base64 binary
 			String result = "result"; // [ "success" | error ]
 
 		}
@@ -75,7 +75,7 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String step = "step";
-			String data = "data"; // base64 binary
+			String auth = "auth"; // base64 binary
 
 		}
 
@@ -83,7 +83,7 @@ public interface JRAuth {
 
 			String mechanism = "mechanism";
 			String next_step = "next_step";
-			String data = "data"; // base64 binary
+			String challenge = "challenge"; // base64 binary
 			String result = "result"; // [ "success" | error ]
 
 		}
