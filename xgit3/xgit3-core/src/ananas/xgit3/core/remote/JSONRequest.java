@@ -2,6 +2,8 @@ package ananas.xgit3.core.remote;
 
 import java.util.Map;
 
+import ananas.xgit3.core.HashID;
+
 import com.alibaba.fastjson.JSONObject;
 
 public interface JSONRequest {
@@ -15,6 +17,8 @@ public interface JSONRequest {
 	JSONObject request();
 
 	void setToken(String token);
+
+	void setToken(HashID token);
 
 	void setTarget(String method, String aClassName, String id);
 

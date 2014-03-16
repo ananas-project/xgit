@@ -1,5 +1,6 @@
 package ananas.xgit3.core.remote.protocol.jsonreq.level2;
 
+import ananas.xgit3.core.HashID;
 import ananas.xgit3.core.remote.RemoteRepo;
 import ananas.xgit3.core.remote.protocol.jsonreq.JRMethod;
 
@@ -15,11 +16,13 @@ public interface JRToken {
 
 	}
 
-	NewToken newToken();
+	NewToken doNewToken();
 
-	OpenToken openToken();
+	OpenToken doOpenToken();
 
-	GetToken getToken();
+	GetToken doGetToken();
+
+	HashID getTokenId();
 
 	interface NewToken extends JRMethod {
 
@@ -32,7 +35,7 @@ public interface JRToken {
 
 		}
 
-		String getTokenId();
+		HashID getTokenId();
 	}
 
 	interface OpenToken extends JRMethod {
@@ -46,7 +49,7 @@ public interface JRToken {
 
 		}
 
-		String getTokenId();
+		HashID getTokenId();
 
 	}
 
@@ -61,7 +64,7 @@ public interface JRToken {
 
 		}
 
-		String getTokenId();
+		HashID getTokenId();
 
 	}
 

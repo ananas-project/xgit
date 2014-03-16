@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import ananas.xgit3.core.HashID;
 import ananas.xgit3.core.remote.JSONRequest;
 import ananas.xgit3.core.remote.RemoteRepo;
 
@@ -141,6 +142,14 @@ public class JSONRequestImpl implements JSONRequest {
 	@Override
 	public void setHttpMethod(String method) {
 		this._http_method = method;
+	}
+
+	@Override
+	public void setToken(HashID token) {
+		String str = null;
+		if (token != null)
+			str = token.toString();
+		this.__set_param("token", str);
 	}
 
 }
