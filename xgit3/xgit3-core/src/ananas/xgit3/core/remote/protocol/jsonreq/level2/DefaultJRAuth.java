@@ -33,8 +33,6 @@ public class DefaultJRAuth implements JRAuth {
 
 	private class RegisterAuthImpl implements RegisterAuth {
 
-		private String _user_name;
-		private String _passwd;
 		private String _mech;
 		private String _step;
 		private String _base64_auth;
