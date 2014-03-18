@@ -8,6 +8,4 @@ public interface RemoteRepo {
 
 	RemoteObjectBank getBank();
 
-	JSONRequest createJSONRequest();
-
 }
