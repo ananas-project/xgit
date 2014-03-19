@@ -5,8 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import ananas.xgit3.core.HashID;
+import ananas.xgit3.core.bank.ZippedObject;
 
-public interface LocalObject extends FileNode {
+public interface LocalObject extends FileNode, ZippedObject {
 
 	int mode_file = 100644; // 表明这是一个普通文件
 	int mode_exe = 100755; // 表示可执行文件
@@ -22,11 +23,9 @@ public interface LocalObject extends FileNode {
 
 	InputStream openZippedInputStream() throws IOException;
 
-	// OutputStream openPlainOutputStream() throws IOException;
-
 	OutputStream openZippedOutputStream() throws IOException;
 
-	LocalObjectBank ownerBank();
+	LocalObjectBank ownerBankLF();
 
 	long length();
 

@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
 
 import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
+import ananas.xgit3.core.bank.ZippedObject;
 import ananas.xgit3.core.local.LocalObject;
 import ananas.xgit3.core.local.LocalObjectBank;
 import ananas.xgit3.core.local.LocalObjectPathGenerator;
@@ -123,6 +125,31 @@ public class DefaultLocalBank implements LocalObjectBank {
 	@Override
 	public HashAlgorithmProvider getHashAlgorithmProvider() {
 		return this._hash_provider;
+	}
+
+	@Override
+	public Enumeration<ZippedObject> get(Enumeration<HashID> ids) {
+		return new MyObjEnum(ids);
+	}
+
+	private class MyObjEnum implements Enumeration<ZippedObject> {
+
+		private final Enumeration<HashID> _ids;
+
+		public MyObjEnum(Enumeration<HashID> ids) {
+			this._ids = ids;
+		}
+
+		@Override
+		public boolean hasMoreElements() {
+			return _ids.hasMoreElements();
+		}
+
+		@Override
+		public ZippedObject nextElement() {
+			HashID id = _ids.nextElement();
+			return DefaultLocalBank.this.get(id);
+		}
 	}
 
 }

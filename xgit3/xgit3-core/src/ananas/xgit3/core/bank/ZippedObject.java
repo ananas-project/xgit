@@ -1,5 +1,6 @@
 package ananas.xgit3.core.bank;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -11,9 +12,9 @@ public interface ZippedObject {
 
 	ObjectBank ownerBank();
 
-	InputStream openZippedInputStream();
+	InputStream openZippedInputStream() throws IOException;
 
-	OutputStream openZippedOutputStream();
+	OutputStream openZippedOutputStream() throws IOException;
 
 	HashID id();
 

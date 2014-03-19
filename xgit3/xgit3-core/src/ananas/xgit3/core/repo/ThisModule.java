@@ -1,8 +1,8 @@
-package ananas.xgit3.core.remote;
+package ananas.xgit3.core.repo;
 
 import ananas.xgit3.core.util.ModuleT;
 
-class ThisModule extends ModuleT<RemoteModule> {
+final class ThisModule extends ModuleT<RepoModule> {
 
 	private final static ThisModule _inst;
 
@@ -10,7 +10,7 @@ class ThisModule extends ModuleT<RemoteModule> {
 		_inst = new ThisModule();
 	}
 
-	public static RemoteModule getModule() {
+	public static RepoModule getModule() {
 		return _inst.getModuleT();
 	}
 }

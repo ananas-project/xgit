@@ -6,8 +6,9 @@ import java.io.InputStream;
 
 import ananas.xgit3.core.HashAlgorithmProvider;
 import ananas.xgit3.core.HashID;
+import ananas.xgit3.core.bank.ObjectBank;
 
-public interface LocalObjectBank extends DirectoryNode {
+public interface LocalObjectBank extends DirectoryNode, ObjectBank {
 
 	LocalObject get(HashID id);
 
@@ -22,7 +23,7 @@ public interface LocalObjectBank extends DirectoryNode {
 
 	LocalObjectPathGenerator getPathGenerator();
 
-	HashAlgorithmProvider  getHashAlgorithmProvider ();
+	HashAlgorithmProvider getHashAlgorithmProvider();
 
 	class Factory {
 

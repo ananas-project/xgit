@@ -2,7 +2,9 @@ package ananas.xgit3.core.local;
 
 import java.io.File;
 
-public interface LocalRepoFinder {
+import ananas.xgit3.core.repo.RepoFinder;
+
+public interface LocalRepoFinder extends RepoFinder {
 
 	LocalRepo findRepo(File file);
 

@@ -15,6 +15,8 @@ import ananas.xgit3.core.local.LocalTag;
 import ananas.xgit3.core.local.LocalTree;
 import ananas.xgit3.core.local.ext.XGitExtends;
 import ananas.xgit3.core.local.tree.TreeMaker;
+import ananas.xgit3.core.repo.BranchManager;
+import ananas.xgit3.core.repo.RepoInfo;
 
 public class DefaultLocalRepo implements LocalRepo {
 
@@ -33,6 +35,10 @@ public class DefaultLocalRepo implements LocalRepo {
 
 	@Override
 	public LocalObjectBank getBank() {
+		return this.__getBank();
+	}
+
+	private LocalObjectBank __getBank() {
 		LocalObjectBank bank = this._bank;
 		if (bank == null) {
 			File path = new File(this._path, "objects");
@@ -80,6 +86,23 @@ public class DefaultLocalRepo implements LocalRepo {
 	@Override
 	public LocalTag getTag(HashID id) {
 		return new LocalGitTag(this.getBank(), id);
+	}
+
+	@Override
+	public RepoInfo getInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BranchManager getBranchManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LocalObjectBank getBankLF() {
+		return this.__getBank();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import ananas.xgit3.core.HashID;
+import ananas.xgit3.core.bank.ObjectBank;
 
 public class LocalObjectWrapper implements LocalObject {
 
@@ -31,10 +32,6 @@ public class LocalObjectWrapper implements LocalObject {
 		return target.openZippedOutputStream();
 	}
 
-	public LocalObjectBank ownerBank() {
-		return target.ownerBank();
-	}
-
 	public long length() {
 		return target.length();
 	}
@@ -49,6 +46,16 @@ public class LocalObjectWrapper implements LocalObject {
 
 	public boolean exists() {
 		return target.exists();
+	}
+
+	@Override
+	public LocalObjectBank ownerBankLF() {
+		return target.ownerBankLF();
+	}
+
+	@Override
+	public ObjectBank ownerBank() {
+		return target.ownerBank();
 	}
 
 }
