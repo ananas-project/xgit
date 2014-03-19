@@ -1,10 +1,12 @@
 package ananas.xgit3.core.remote;
 
+import java.net.URI;
+
 public interface RemoteContext {
 
 	RemoteRepo getRepo(RemoteRepoInfo info);
 
-	RemoteRepoInfo getRepoInfo(String uri);
+	RemoteRepoInfo getRepoInfo(URI uri);
 
 	RemoteRepoFinder getFinder();
 
